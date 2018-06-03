@@ -1,0 +1,13 @@
+[hosts]
+db01
+db02
+backup
+
+[db-primary]
+db01
+
+[db-secondary]
+db02
+
+[backupserver]
+backup

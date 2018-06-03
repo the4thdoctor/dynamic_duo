@@ -3,11 +3,14 @@ db01
 db02
 backup
 
-[db-primary]
+[apt]
 db01
+db02
+backup
 
-[db-secondary]
+[dbserver]
+db01
 db02
 
-[backupserver]
+[bckserver]
 backup

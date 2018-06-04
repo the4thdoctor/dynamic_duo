@@ -1,3 +1,12 @@
 ---
-- name: add the postgresql key to the apt repository
+- name: Set the codename to the group var or lsb_release, whether it comes first
+  set_fact:
+    codename: "{{ lsb_release | default(ansible_lsb['codename'])  }}"
+
+- name: Add the postgresql key to the apt repository
   apt_key: url="https://www.postgresql.org/media/keys/ACCC4CF8.asc" state=present
+  
+- name: add postgresql repository
+  apt_repository: 
+    repo: "deb http://apt.postgresql.org/pub/repos/apt/ {{ codename }}-pgdg main"
+    state: present

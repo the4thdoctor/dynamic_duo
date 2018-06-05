@@ -1,0 +1,6 @@
+install_packages:
+  - pgbackrest
+  - postgresql-10
+  - postgresql-client-10
+  - postgresql-contrib-10
+  - python-psycopg2

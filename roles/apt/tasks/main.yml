@@ -10,3 +10,10 @@
   apt_repository: 
     repo: "deb http://apt.postgresql.org/pub/repos/apt/ {{ codename }}-pgdg main"
     state: present
+    
+- name: install packages
+  apt: 
+    name: "{{ item }}"
+    update_cache: yes  
+    cache_valid_time: 86400
+  with_items: "{{ install_packages }}"

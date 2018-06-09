@@ -6,12 +6,16 @@ backup
 [apt]
 db01
 db02
+<<<<<<< HEAD
 backup
 
+=======
+backupsrv
+>>>>>>> master
 
 [dbserver]
 db01
 db02
 
 [bckserver]
-backup
+backupsrv

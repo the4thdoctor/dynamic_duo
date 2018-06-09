@@ -1,0 +1,6 @@
+---
+- hosts: apt
+  roles:
+    - rollback
+  remote_user: ansible
+  become: yes

@@ -3,4 +3,6 @@ install_packages:
   - postgresql-10
   - postgresql-client-10
   - postgresql-contrib-10
+  - postgresql-client-common
+  - postgresql-common
   - python-psycopg2

@@ -1,0 +1,17 @@
+---
+- name: remove packages
+  apt: 
+    name: "{{ item }}"
+    state: absent
+  with_items: "{{ install_packages }}"
+  
+- name: Remove the postgresql key to the apt repository
+  apt_key: 
+    id: "0xACCC4CF8"
+    state: absent
+  
+- name: remove file postgresql repository
+  file: 
+    path: "/etc/apt/sources.list.d/apt_postgresql_org_pub_repos_apt.list"
+    state: absent
+    

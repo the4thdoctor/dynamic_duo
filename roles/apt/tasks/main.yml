@@ -3,9 +3,6 @@
   set_fact:
     codename: "{{ pgdg_codename[ansible_lsb['codename']] | default(ansible_lsb['codename'])  }}"
 
-    
-- debug:
-    msg: "{{ codename }}"
 - name: Add the postgresql key to the apt repository
   apt_key: url="https://www.postgresql.org/media/keys/ACCC4CF8.asc" state=present
   

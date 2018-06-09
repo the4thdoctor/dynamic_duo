@@ -6,16 +6,11 @@ backup
 [apt]
 db01
 db02
-backup
-
-[devuan_ascii]
-db01
-db02
-backup
+backupsrv
 
 [dbserver]
 db01
 db02
 
 [bckserver]
-backup
+backupsrv

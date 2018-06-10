@@ -1,9 +1,9 @@
----
-- name: Ship the hostname template with the server names
+---  
+- name: Rollback the hosts file
   template:
     src: hosts.j2
     dest: /etc/hosts
     owner: root
     group: root
     mode: 0644
-  when: no_dns | default(False)
+  

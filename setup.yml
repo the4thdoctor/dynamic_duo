@@ -5,3 +5,9 @@
     - apt
   remote_user: ansible
   become: yes
+  
+- hosts: pgsql
+  roles:
+    - pgsql
+  remote_user: ansible
+  become: yes

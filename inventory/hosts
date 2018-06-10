@@ -9,6 +9,12 @@ db01
 db02
 backupsrv
 
+[pgsql]
+db01
+db02
+backupsrv
+
+
 [dbserver]
 db01
 db02

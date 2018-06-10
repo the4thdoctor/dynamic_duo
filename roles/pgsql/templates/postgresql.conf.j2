@@ -1,0 +1,3 @@
+{% for guc  in postgres_conf %}
+{{ guc }} = '{{ postgres_conf[guc] }}'
+{% endfor %}

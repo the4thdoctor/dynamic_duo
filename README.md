@@ -52,8 +52,8 @@ If your servers are resolving using dns you can skip this role safely.
 ### Role apt
 The role apt is used to install the required packages listed in the ``apt`` group_vars file.
 
-The role setup the pgdg repository importing the signing key. The lsb_codename is dynamically generated.
+The role setup the pgdg repository importing the signing key. The ``lsb_codename`` is dynamically generated from the ansible facts.
 
-The role manages automatically the special case of devuan ascii which maps to debian stretch in the pgdg repository.
+The role manages automatically the special case of [devuan ascii](https://devuan.org/) which maps to debian stretch in the pgdg repository.
 
-The installed packages are postgresql-10, postgresql-client-10 postgresql-contrib-10, pgbackrest and python-psycopg2.
+The role apt installs the packages **postgresql-10, postgresql-client-10 postgresql-contrib-10, pgbackrest, python-psycopg2**.

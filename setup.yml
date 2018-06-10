@@ -1,6 +1,7 @@
 ---
 - hosts: apt
   roles:
+    - hosts
     - apt
   remote_user: ansible
   become: yes

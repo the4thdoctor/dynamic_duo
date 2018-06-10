@@ -1,0 +1,13 @@
+---
+- name: Ship the hostname template with the server names
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: 0644
+  when: no_dns | default(False)
+  
+- debug:
+    msg: "{{ hostvars[item]['srv_ip'] }}"
+  with_items: "{{ groups['hosts'] }}"

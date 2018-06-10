@@ -1,4 +1,4 @@
-# dinamic_duo
+# dynamic_duo
 Repository with ansible configuration for ansible and pgbackrest
 
 The playbooks are written against the ansible version 2.5.

@@ -20,10 +20,10 @@ The actions from the roles can be rolled back individually passing the appropria
     #rolls back the apt configuration leaving the hosts untouched
     ansible-playbook rollback.yml --extra-vars="rbk_apt=True"
 
-* rbk_hosts=True Rollsback the hosts configuration
-* rbk_apt=True Rollsback the apt configuration
-* rbk_ssh=True Rollsback the ssh configuration
-* rbk_all=True Rollsback all the changes applied
+* **rbk_hosts=True** removes the hosts configuration
+* **rbk_apt=True** removes the apt configuration
+* **rbk_ssh=True** removes the ssh configuration
+* **rbk_all=True** removes all the changes applied
 
 
 ## Branch documentation

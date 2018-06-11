@@ -1,6 +1,5 @@
-pgdg_codename: 
-  ascii: stretch 
+pgdg_codename:
+  ascii: stretch
 
-  
-  
-  
+pg_osuser: "postgres"
+pg_osgroup: "postgres"

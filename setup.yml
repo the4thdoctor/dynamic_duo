@@ -5,8 +5,13 @@
     - apt
   remote_user: ansible
   become: yes
-  
-- hosts: pgsql
+- hosts: dbserver,bckserver
+  roles:
+    - ssh
+  remote_user: ansible
+  become: yes
+
+- hosts: dbserver,bckserver
   roles:
     - pgsql
   remote_user: ansible

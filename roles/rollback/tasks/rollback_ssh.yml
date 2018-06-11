@@ -1,0 +1,11 @@
+---
+- name: create the user's data
+  user:
+    name: "{{ pg_osuser }}"
+  register: usr
+
+
+- name: remove the ssh directory in the postgres user
+  file:
+    path: "{{ usr['home'] }}/.ssh"
+    state: absent

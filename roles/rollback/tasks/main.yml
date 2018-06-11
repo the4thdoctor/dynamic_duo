@@ -2,4 +2,6 @@
 - include: rollback_hosts.yml
   when: rbk_hosts | default(False) or rbk_all| default(False)
 - include: rollback_apt.yml
-  when: rbk_apt | default(False)or rbk_all| default(False)
+  when: rbk_apt | default(False) or rbk_all| default(False)
+- include: rollback_ssh.yml
+  when: rbk_ssh | default(False) or rbk_all| default(False)

@@ -15,45 +15,18 @@ Each branch have a special role rollback which can rollback the changes applied 
 
 As this is potentially destructive role by default all the tasks are skipped.
 
-The specific roles can be rolled back individually passing the appropriate variable set to true or entirely using the wildcard variable ``rbk_all``.
+The actions from the roles can be rolled back individually passing the appropriate variable set to true or entirely using the wildcard variable ``rbk_all``.
 
     #rolls back the apt configuration leaving the hosts untouched
     ansible-playbook rollback.yml --extra-vars="rbk_apt=True"
 
-## Branch 01_install
-
-This branch installs a base system with postgresql, pgbackrest and pythonpg.
-
-The playbook setup.yml executes two roles, ``hosts`` and ``apt``
-
-### Role hosts
-
-The role ``hosts`` is used to setup the file ``/etc/hosts`` with the three database servers if there is no dns configured.
-
-The role consists of a single task which is skipped by default.
-If you want to execute the role ensure that in the host file the ip addresses are correctly associated with the host names
-
-e.g.
-
-    [hosts]
-    db01 srv_ip=192.168.1.21
-    db02 srv_ip=192.168.1.24
-    backupsrv srv_ip=192.168.1.22
-
-When running the playbook add the extra var no_dns=True
-
-e.g.
-
-    ansible-playbook setup.yml --extra-vars="no_dns=True"
-
-If your servers are resolving using dns you can skip this role safely.
+* **rbk_hosts=True** removes the hosts configuration
+* **rbk_apt=True** removes the apt configuration
+* **rbk_ssh=True** removes the ssh configuration
+* **rbk_all=True** removes all the changes applied
 
 
-### Role apt
-The role apt is used to install the required packages listed in the ``apt`` group_vars file.
+## Branch documentation
 
-The role setup the pgdg repository importing the signing key. The ``lsb_codename`` is dynamically generated from the ansible facts.
-
-The role manages automatically the special case of [devuan ascii](https://devuan.org/) which maps to debian stretch in the pgdg repository.
-
-The role apt installs the packages **postgresql-10, postgresql-client-10 postgresql-contrib-10, pgbackrest, python-psycopg2**.
+* [Branch 01_install](docs/01_install.md)
+* [Branch 02_ssh_config](docs/02_ssh_config.md)

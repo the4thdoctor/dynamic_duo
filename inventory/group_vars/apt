@@ -1,8 +1,8 @@
 install_packages:
+  - postgresql-client-common
+  - postgresql-common
   - pgbackrest
   - postgresql-10
   - postgresql-client-10
   - postgresql-contrib-10
-  - postgresql-client-common
-  - postgresql-common
   - python-psycopg2

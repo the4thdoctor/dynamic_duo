@@ -5,13 +5,3 @@ pgdg_codename:
 
 pg_osuser: "postgres"
 pg_osgroup: "postgres"
-
-
-pg_version: 10
-pg_cluster: main
-
-pg_conf_dir: "/etc/postgresql/{{ pg_version }}/{{ pg_cluster }}"
-
-postgres_conf:
-  shared_buffers: "256MB"
-  listen_addresses: "*"

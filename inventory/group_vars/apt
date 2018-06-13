@@ -1,8 +1,16 @@
-install_packages:
-  - pgbackrest
-  - postgresql-10
-  - postgresql-client-10
-  - postgresql-contrib-10
+pgsql_versions:
+  - 9.6
+  - 10
+
+
+pgsql_packages:
+- postgresql-
+- postgresql-client-
+- postgresql-contrib-
+
+
+common_packages:
   - postgresql-client-common
   - postgresql-common
+  - pgbackrest
   - python-psycopg2

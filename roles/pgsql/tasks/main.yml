@@ -5,7 +5,7 @@
     owner: "{{ pg_osuser }}"
     group: "{{ pg_osgroup }}"
     state: directory
-    mode: 0744
+    mode: 0700
   with_dict: "{{ pg_clusters}}"
 
 
@@ -15,15 +15,22 @@
     owner: "{{ pg_osuser }}"
     group: "{{ pg_osgroup }}"
     state: directory
-    mode: 0744
+    mode: 0700
   with_dict: "{{ pg_clusters}}"
 
 
 - name: Create the postgresql log directory
   file:
-    path: "{{ item.value.log_directory|default(log_directory) }}/{{item.value.version}}/{{item.key}}"
+    path: "{{ item.value.log_directory|default(log_directory) }}"
     owner: "{{ pg_osuser }}"
     group: "{{ pg_osgroup }}"
     state: directory
     mode: 0744
+  with_dict: "{{ pg_clusters}}"
+
+
+- name: Initialise the postgresql clusters
+  command: "pg_createcluster -p {{ item.value.params.port}} -d {{ item.value.data_area|default(data_area) }}/{{item.value.version}}/{{item.key}} -l {{ item.value.wal_area|default(wal_area) }}/{{item.value.version}}/{{item.key}} {{item.value.version}} {{item.key}} "
+  args:
+    creates: "{{ item.value.wal_area|default(wal_area) }}/{{item.value.version}}/{{item.key}}/PG_VERSION"
   with_dict: "{{ pg_clusters}}"

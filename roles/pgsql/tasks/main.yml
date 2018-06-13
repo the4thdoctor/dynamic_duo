@@ -1,1 +1,9 @@
 ---
+- name: Create the postgresql directories
+  file:
+    path: "{{ item.value.data_area|default(data_area) }}/{{item.value.version}}/{{item.key}}"
+    owner: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    state: directory
+    mode: 0744
+  with_dict: "{{ pg_clusters}}"

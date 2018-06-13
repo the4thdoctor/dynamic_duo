@@ -1,3 +1,4 @@
+postgresql_common_include: "/etc/postgresql-common/createcluster.d"
 pgsql_versions:
   - 9.6
   - 10

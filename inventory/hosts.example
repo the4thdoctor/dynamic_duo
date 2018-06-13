@@ -3,16 +3,15 @@ db01 srv_ip=192.168.1.21
 db02 srv_ip=192.168.1.24
 backupsrv srv_ip=192.168.1.22
 
-
-[apt]
-db01
-db02
-backupsrv
-
 [pgsql]
 db01
 db02
 backupsrv
+
+
+[apt:children]
+pgsql
+
 
 
 [dbserver]

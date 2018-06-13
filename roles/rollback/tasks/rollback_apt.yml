@@ -1,17 +1,28 @@
----  
-- name: remove packages
-  apt: 
+---
+- name: remove postgresql versioned packages
+  apt:
+    name: "{{ item.0 }}{{ item.1 }}"
+    state: absent
+  with_nested:
+    - "{{ pgsql_packages }}"
+    - "{{ pgsql_versions }}"
+
+
+- name: remove common packages
+  apt:
     name: "{{ item }}"
     state: absent
-  with_items: "{{ install_packages }}"
-  
+  with_items: "{{ common_packages }}"
+
+
+
+
 - name: Remove the postgresql key to the apt repository
-  apt_key: 
+  apt_key:
     id: "0xACCC4CF8"
     state: absent
-  
+
 - name: remove file postgresql repository
-  file: 
+  file:
     path: "/etc/apt/sources.list.d/apt_postgresql_org_pub_repos_apt.list"
     state: absent
-    

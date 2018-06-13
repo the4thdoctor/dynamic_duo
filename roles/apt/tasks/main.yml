@@ -5,15 +5,31 @@
 
 - name: Add the postgresql key to the apt repository
   apt_key: url="https://www.postgresql.org/media/keys/ACCC4CF8.asc" state=present
-  
+
 - name: add postgresql repository
-  apt_repository: 
+  apt_repository:
     repo: "deb http://apt.postgresql.org/pub/repos/apt/ {{ codename }}-pgdg main"
     state: present
-    
-- name: install packages
-  apt: 
+
+- name: install common packages
+  apt:
     name: "{{ item }}"
-    update_cache: yes  
+    update_cache: yes
     cache_valid_time: 86400
-  with_items: "{{ install_packages }}"
+  with_items: "{{ common_packages }}"
+
+
+- name: disable main cluster creation
+  lineinfile:
+    path: "/etc/postgresql-common/createcluster.conf"
+    regexp: "^#create_main_cluster = true"
+    line: "create_main_cluster = false"
+
+- name: install postgresql versioned packages
+  apt:
+    name: "{{ item.0 }}{{ item.1 }}"
+    update_cache: yes
+    cache_valid_time: 86400
+  with_nested:
+    - "{{ pgsql_packages }}"
+    - "{{ pgsql_versions }}"

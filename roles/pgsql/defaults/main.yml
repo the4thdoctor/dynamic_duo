@@ -4,7 +4,3 @@ params:
   work_mem: "10MB"
   maintenance_work_mem: "30MB"
   max_connections: "50"
-
-data_area: "/var/lib/postgresql"
-log_directory: "/var/log/postgresql"
-wal_area: "/var/log/postgresql/pg_wal"

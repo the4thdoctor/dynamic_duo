@@ -1,1 +1,6 @@
 ---
+- name: Remove the postgresql directories
+  file:
+    path: "{{ item.value.data_area|default(data_area) }}/{{item.value.version}}/{{item.key}}"
+    state: absent
+  with_dict: "{{ pg_clusters}}"

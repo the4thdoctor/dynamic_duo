@@ -1,5 +1,5 @@
 ---
-- hosts: apt
+- hosts: rollback
   roles:
     - rollback
   remote_user: ansible

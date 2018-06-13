@@ -11,18 +11,11 @@
     repo: "deb http://apt.postgresql.org/pub/repos/apt/ {{ codename }}-pgdg main"
     state: present
 
-<<<<<<< HEAD
-- name: install additional packages
-=======
 - name: install common packages
->>>>>>> 01_install
   apt:
     name: "{{ item }}"
     update_cache: yes
     cache_valid_time: 86400
-<<<<<<< HEAD
-  with_items: "{{ additional_packages }}"
-=======
   with_items: "{{ common_packages }}"
 
 
@@ -31,7 +24,6 @@
     path: "/etc/postgresql-common/createcluster.conf"
     regexp: "^#create_main_cluster = true"
     line: "create_main_cluster = false"
->>>>>>> 01_install
 
 - name: install postgresql versioned packages
   apt:

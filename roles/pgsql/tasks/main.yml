@@ -29,7 +29,7 @@
   with_dict: "{{ pg_clusters}}"
 
 - name: Initialise the postgresql clusters
-  command: "pg_createcluster -p {{ item.value.params.port}} -d {{ item.value.data_area|default(data_area) }}/{{item.value.version}}/{{item.key}}  {{item.value.version}} {{item.key}}  -- -X {{ item.value.wal_area|default(wal_area) }}/{{item.value.version}}/{{item.key}}"
+  command: "pg_createcluster -l {{ item.value.log_directory|default(log_directory) }}/postgresql-{{item.value.version}}-{{item.key}}.log -p {{ item.value.params.port}} -d {{ item.value.data_area|default(data_area) }}/{{item.value.version}}/{{item.key}}  {{item.value.version}} {{item.key}}  -- -X {{ item.value.wal_area|default(wal_area) }}/{{item.value.version}}/{{item.key}}"
   args:
     creates: "{{ item.value.data_area|default(data_area) }}/{{item.value.version}}/{{item.key}}/PG_VERSION"
   with_dict: "{{ pg_clusters}}"

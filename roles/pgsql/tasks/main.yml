@@ -1,7 +1,27 @@
 ---
-- name: Create the postgresql directories
+- name: Create the postgresql data area
   file:
     path: "{{ item.value.data_area|default(data_area) }}/{{item.value.version}}/{{item.key}}"
+    owner: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    state: directory
+    mode: 0744
+  with_dict: "{{ pg_clusters}}"
+
+
+- name: Create the postgresql wal area
+  file:
+    path: "{{ item.value.wal_area|default(wal_area) }}/{{item.value.version}}/{{item.key}}"
+    owner: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    state: directory
+    mode: 0744
+  with_dict: "{{ pg_clusters}}"
+
+
+- name: Create the postgresql log directory
+  file:
+    path: "{{ item.value.log_directory|default(log_directory) }}/{{item.value.version}}/{{item.key}}"
     owner: "{{ pg_osuser }}"
     group: "{{ pg_osgroup }}"
     state: directory

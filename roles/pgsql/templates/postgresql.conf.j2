@@ -1,3 +1,4 @@
-{% for guc  in postgres_conf %}
-{{ guc }} = '{{ postgres_conf[guc] }}'
+{% set cluster_params = params|combine(item.value.params) %}
+{%for parameter in cluster_params %}
+{{ parameter }}='{{ cluster_params[parameter] }}'
 {% endfor %}

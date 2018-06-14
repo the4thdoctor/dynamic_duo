@@ -1,0 +1,26 @@
+data_area: "/var/lib/postgresql"
+log_directory: "/var/log/postgresql"
+wal_area: "/var/lib/postgresql/pg_wal"
+
+pg_clusters:
+  tron:
+    version: "10"
+    params:
+      port: "5432"
+      listen_addresses: "*"
+    data_area: "/pg_data"
+    log_directory: "/pg_log"
+
+  clu:
+    version: "9.6"
+    params:
+      port: "5433"
+      listen_addresses: "*"
+      wal_level: "logical"
+
+  flynn:
+    version: "9.6"
+    params:
+      port: "5434"
+      listen_addresses: "*"
+      wal_level: "replica"

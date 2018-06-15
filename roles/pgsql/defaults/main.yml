@@ -4,3 +4,11 @@ params:
   work_mem: "10MB"
   maintenance_work_mem: "30MB"
   max_connections: "50"
+
+
+pg_hba:
+  - type: "local"
+    database: "all"
+    user: "postgres"
+    address: ""
+    method: "peer"

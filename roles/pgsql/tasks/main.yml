@@ -62,6 +62,13 @@
     mode: 0644
   with_dict: "{{ pg_clusters}}"
 
+- name: debug
+  debug:
+    msg: "{{ pg_hba + item.value.pg_hba }}"
+  with_dict: "{{ pg_clusters}}"
+
+
+
 
 - name: Start the postgresql service
   service:

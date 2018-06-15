@@ -10,6 +10,13 @@ pg_clusters:
       listen_addresses: "*"
     data_area: "/pg_data"
     log_directory: "/pg_log"
+    pg_hba:
+      - type: "host"
+        database: "all"
+        user: "all"
+        address: "127.0.0.1/32"
+        method: "md5"
+
 
   clu:
     version: "9.6"
@@ -17,6 +24,8 @@ pg_clusters:
       port: "5433"
       listen_addresses: "*"
       wal_level: "logical"
+
+
 
   flynn:
     version: "9.6"

@@ -20,9 +20,13 @@
     - "{{ groups.dbserver }}"
     - "{{ groups.bckserver }}"
 
-- name: connect via ssh to the server with StrictHostKeyChecking=no
-  shell: "ssh {{ hostvars[item]['inventory_hostname'] }} -o StrictHostKeyChecking=no /bin/true"
-  become_user: "{{ pg_osuser }}"
+- name: populate known_hosts for the servers
+  blockinfile:
+    dest: "{{usr['home']}}/.ssh/known_hosts"
+    create: yes
+    state: present
+    owner: "{{ pg_osuser }}"
+    block: "{{ lookup('pipe', 'ssh-keyscan -T 10 ' ~ hostvars[item]['inventory_hostname']) }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
   with_items:
-    - "{{ groups.dbserver }}"
-    - "{{ groups.bckserver }}"
+    - "{{ groups.dbserver }} + {{ groups.bckserver }}"

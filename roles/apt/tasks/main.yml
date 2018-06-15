@@ -19,12 +19,6 @@
   with_items: "{{ common_packages }}"
 
 
-- name: disable main cluster creation
-  lineinfile:
-    path: "/etc/postgresql-common/createcluster.conf"
-    regexp: "^#create_main_cluster = true"
-    line: "create_main_cluster = false"
-
 - name: install postgresql versioned packages
   apt:
     name: "{{ item.0 }}{{ item.1 }}"

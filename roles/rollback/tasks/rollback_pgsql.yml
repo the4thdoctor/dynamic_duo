@@ -2,7 +2,7 @@
 - name: Drop the postgresql clusters
   command: "pg_dropcluster {{item.value.version}} {{item.key}} --stop"
   with_dict: "{{ pg_clusters}}"
-  
+  ignore_errors: Yes
 
 - name: Remove the postgresql directories
   file:

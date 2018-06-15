@@ -62,12 +62,14 @@
     mode: 0644
   with_dict: "{{ pg_clusters}}"
 
-- name: debug
-  debug:
-    msg: "{{ pg_hba + item.value.pg_hba }}"
+- name: Ship the  pg_hba.conf in cluster's config directory
+  template:
+    src: pg_hba.conf.j2
+    dest: "/etc/postgresql/{{item.value.version}}/{{item.key}}/pg_hba.conf"
+    owner: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    mode: 0644
   with_dict: "{{ pg_clusters}}"
-
-
 
 
 - name: Start the postgresql service

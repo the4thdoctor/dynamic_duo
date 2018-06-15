@@ -1,6 +1,6 @@
-{% set cluster_hba = pg_hba|combine(default(omit)|item.value.pg_hba) %}
+{% set cluster_hba = pg_hba + item.value.pg_hba|default([]) %}
 {%for hba in cluster_hba %}
-{{ type }}   {{ database }}  {{ user }} {{ address }} {{ method }}
+{{ hba.type }}   {{ hba.database }}  {{ hba.user }} {{ hba.address }} {{ hba.method }}
 {% endfor %}
 # Database administrative login by Unix domain socket
 local   all             {{ pg_osuser }}                                peer

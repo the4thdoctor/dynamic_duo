@@ -19,23 +19,6 @@
   with_items: "{{ common_packages }}"
 
 
-- name: create include directory for createcluster
-  file:
-    path: "{{postgresql_common_include}}"
-    owner: "{{ pg_osuser }}"
-    group: "{{ pg_osgroup }}"
-    state: directory
-    mode: 0744
-
-- name: add create main_cluster false in custom configuration file
-  lineinfile:
-    path: "{{postgresql_common_include}}/create_main.conf"
-    line: "create_main_cluster = false"
-    create: Yes
-    owner: "{{ pg_osuser }}"
-    group: "{{ pg_osgroup }}"
-    mode: 0744
-
 - name: install postgresql versioned packages
   apt:
     name: "{{ item.0 }}{{ item.1 }}"

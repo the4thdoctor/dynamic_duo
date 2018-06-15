@@ -20,9 +20,12 @@
     - "{{ groups.dbserver }}"
     - "{{ groups.bckserver }}"
 
-- name: connect via ssh to the server with StrictHostKeyChecking=no
-  shell: "ssh {{ hostvars[item]['inventory_hostname'] }} -o StrictHostKeyChecking=no /bin/true"
-  become_user: "{{ pg_osuser }}"
+- name: Add the servers keys to known_hosts
+  known_hosts:
+   name: "{{ hostvars[item]['inventory_hostname'] }}"
+   key: "lookup('file', 'keys/'+ hostvars[item]['inventory_hostname'] +'/'+usr['home']+'/.ssh/id_rsa.pub') }}"
   with_items:
     - "{{ groups.dbserver }}"
     - "{{ groups.bckserver }}"
+  become: true
+  become_user: "{{ pg_osuser }}"

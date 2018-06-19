@@ -1,4 +1,11 @@
 ---
+- name: drop the main postgresql clusters
+  command: "pg_dropcluster --stop {{ item }} main"
+  with_items: "{{ pgsql_versions }}"
+  ignore_errors: yes
+
+
+
 - name: remove postgresql versioned packages
   apt:
     name: "{{ item.0 }}{{ item.1 }}"

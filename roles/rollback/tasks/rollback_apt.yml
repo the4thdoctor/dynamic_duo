@@ -1,17 +1,26 @@
 ---
-- name: remove postgresql versioned packages
+- name: drop the main postgresql clusters
+  command: "pg_dropcluster --stop {{ item }} main"
+  with_items: "{{ pgsql_versions }}"
+  ignore_errors: yes
+
+
+
+- name: purge postgresql versioned packages
   apt:
     name: "{{ item.0 }}{{ item.1 }}"
     state: absent
+    purge: yes
   with_nested:
     - "{{ pgsql_packages }}"
     - "{{ pgsql_versions }}"
 
 
-- name: remove common packages
+- name: purge common packages
   apt:
     name: "{{ item }}"
     state: absent
+    purge: yes
   with_items: "{{ common_packages }}"
 
 

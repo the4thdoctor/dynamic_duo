@@ -18,6 +18,3 @@ common_packages:
   - postgresql-common
   - pgbackrest
   - python-psycopg2
-
-
-pg_home_dir: /var/lib/postgresql

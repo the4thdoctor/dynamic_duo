@@ -1,4 +1,11 @@
 ---
+- name: create the postgresql user and the home directory
+  user:
+    name: "{{ pg_osuser }}"
+    create_home: yes
+    move_home: yes
+    home: "{{ pg_home_dir }}"
+    
 - name: Set the codename to the pgdg_codename translation or the lsb_release, whether it comes first
   set_fact:
     codename: "{{ pgdg_codename[ansible_lsb['codename']] | default(ansible_lsb['codename'])  }}"

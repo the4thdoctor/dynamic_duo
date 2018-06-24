@@ -1,0 +1,4 @@
+---
+pg_home_dir: /var/lib/postgresql
+pg_osuser: "postgres"
+pg_osgroup: "postgres"

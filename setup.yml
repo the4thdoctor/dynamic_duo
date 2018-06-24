@@ -6,7 +6,7 @@
   remote_user: ansible
   become: yes
 
-- hosts: dbserver,bckserver
+- hosts: ssh
   roles:
     - ssh
   remote_user: ansible

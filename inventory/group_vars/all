@@ -2,3 +2,4 @@
 pg_home_dir: /home/postgres
 pg_osuser: "postgres"
 pg_osgroup: "postgres"
+postgresql_common_include: "/etc/postgresql-common/createcluster.d"

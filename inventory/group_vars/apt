@@ -5,7 +5,8 @@ pgdg_codename:
 pgsql_versions:
   - 9.6
   - 10
-postgresql_common_include: "/etc/postgresql-common/createcluster.d"
+create_main_cluster: No
+
 
 pgsql_packages:
 - postgresql-

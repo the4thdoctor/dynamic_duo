@@ -15,6 +15,10 @@
     - "{{ pgsql_packages }}"
     - "{{ pgsql_versions }}"
 
+- name: remove include in postgresql common
+  file:
+    path: "{{ postgresql_common_include }}"
+    state: absent
 
 - name: purge common packages
   apt:

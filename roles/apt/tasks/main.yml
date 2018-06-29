@@ -35,8 +35,8 @@
 
 - name: add create main_cluster false in custom configuration file
   lineinfile:
-    path: "{{postgresql_common_include}}/disable_main_cluster.conf"
-    line: "create_main_cluster = false"
+    path: "{{postgresql_common_include}}/main_cluster.conf"
+    line: "create_main_cluster = {{ create_main_cluster }}"
     create: Yes
     owner: "{{ pg_osuser }}"
     group: "{{ pg_osgroup }}"

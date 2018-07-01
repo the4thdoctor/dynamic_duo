@@ -5,6 +5,9 @@
     create_home: yes
     move_home: yes
     home: "{{ pg_home_dir }}"
+    shell: "{{ pg_shell }}"
+    system: yes
+    state: present
 
 - name: Set the codename to the pgdg_codename translation or the lsb_release, whether it comes first
   set_fact:
@@ -33,7 +36,7 @@
     state: directory
     mode: 0744
 
-- name: add create main_cluster false in custom configuration file
+- name: add create main_cluster line in custom configuration using the variable create_main_cluster
   lineinfile:
     path: "{{postgresql_common_include}}/main_cluster.conf"
     line: "create_main_cluster = {{ create_main_cluster }}"

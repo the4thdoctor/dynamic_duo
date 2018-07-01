@@ -35,7 +35,9 @@
     id: "0xACCC4CF8"
     state: absent
 
-- name: remove file postgresql repository
-  file:
-    path: "/etc/apt/sources.list.d/apt_postgresql_org_pub_repos_apt.list"
+
+- name: remove the postgresql user and the home directory
+  user:
+    name: "{{ pg_osuser }}"
+    remove: yes
     state: absent

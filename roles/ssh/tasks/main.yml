@@ -18,7 +18,7 @@
   authorized_key:
     user: "{{ pg_osuser }}"
     state: present
-    key: "{{ lookup('file', 'keys/'+ hostvars[item]['inventory_hostname'] +'/'+pg_home_dir+'/.ssh/id_rsa.pub') }}"
+    key: "{{ lookup('file', key_dest_dir + '/' + hostvars[item]['inventory_hostname'] + '/'+pg_home_dir+'/.ssh/id_rsa.pub') }}"
   with_items: "{{ groups.ssh }}"
 
 

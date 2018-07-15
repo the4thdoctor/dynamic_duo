@@ -3,30 +3,39 @@
   user:
     name: "{{ pg_osuser }}"
     generate_ssh_key: yes
-    ssh_key_bits: 2048
-  register: usr
+    ssh_key_bits: "{{ ssh_key_bits }}"
+    ssh_key_type: "{{ ssh_key_type }}"
+    ssh_key_file: "{{ pg_home_dir }}/.ssh/{{ ssh_key_file }}"
+
+
 - name: Fetch the keys in the keys directory
   fetch:
-    src: "{{ usr['home'] }}/.ssh/id_rsa.pub"
-    dest: "keys/"
+    src: "{{ pg_home_dir }}/.ssh/{{ssh_key_file}}.pub"
+    dest: "{{ key_dest_dir }}"
 
 
 - name: setup the autorized_keys file on the servers with the public keys
   authorized_key:
     user: "{{ pg_osuser }}"
     state: present
-    key: "{{ lookup('file', 'keys/'+ hostvars[item]['inventory_hostname'] +'/'+usr['home']+'/.ssh/id_rsa.pub') }}"
-  with_items:
-    - "{{ groups.dbserver }}"
-    - "{{ groups.bckserver }}"
+    key: "{{ lookup('file', key_dest_dir + '/' + hostvars[item]['inventory_hostname'] + '/'+pg_home_dir+'/.ssh/' + ssh_key_file +'.pub') }}"
+  with_items: "{{ groups.ssh }}"
+
 
 - name: populate known_hosts for the servers
   blockinfile:
-    dest: "{{usr['home']}}/.ssh/known_hosts"
+    dest: "{{ pg_home_dir }}/.ssh/known_hosts"
     create: yes
     state: present
     owner: "{{ pg_osuser }}"
     block: "{{ lookup('pipe', 'ssh-keyscan -T 10 ' ~ hostvars[item]['inventory_hostname']) }}"
     marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
-  with_items:
-    - "{{ groups.dbserver }} + {{ groups.bckserver }}"
+  with_items: "{{ groups.ssh }}"
+
+- name: Ship the ssh configuration file
+  template:
+    src: config.j2
+    dest: "{{ pg_home_dir }}/.ssh/config"
+    owner: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    mode: 0600

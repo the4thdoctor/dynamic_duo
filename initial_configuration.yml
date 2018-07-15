@@ -1,0 +1,27 @@
+---
+- hosts: hosts
+  remote_user: ansible
+  become: yes
+  become_method: su
+  vars_prompt:
+    - name: "public_key"
+      prompt: "Enter your public key location"
+      default: "~/.ssh/id_rsa.pub"
+  tasks:
+    - name: add the public key to the ansible user
+      authorized_key:
+        user: ansible
+        state: present
+        key: "{{ lookup('file', public_key) }}"
+    - name: install sudo
+      apt:
+        name: sudo
+        update_cache: yes
+        cache_valid_time: 86400
+    - name: Allow the ansible user to have passwordless sudo
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^ansible'
+        line: 'ansible ALL=(ALL) NOPASSWD: ALL'
+        validate: 'visudo -cf %s'

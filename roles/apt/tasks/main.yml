@@ -1,4 +1,14 @@
 ---
+- name: create the postgresql user and the home directory
+  user:
+    name: "{{ pg_osuser }}"
+    create_home: yes
+    move_home: yes
+    home: "{{ pg_home_dir }}"
+    shell: "{{ pg_shell }}"
+    system: yes
+    state: present
+
 - name: Set the codename to the pgdg_codename translation or the lsb_release, whether it comes first
   set_fact:
     codename: "{{ pgdg_codename[ansible_lsb['codename']] | default(ansible_lsb['codename'])  }}"
@@ -18,6 +28,22 @@
     cache_valid_time: 86400
   with_items: "{{ common_packages }}"
 
+- name: create include directory for createcluster
+  file:
+    path: "{{ postgresql_common_include }}"
+    owner: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    state: directory
+    mode: 0744
+
+- name: add create main_cluster line in custom configuration using the variable create_main_cluster
+  lineinfile:
+    path: "{{postgresql_common_include}}/main_cluster.conf"
+    line: "create_main_cluster = {{ create_main_cluster }}"
+    create: Yes
+    owner: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    mode: 0744
 
 - name: install postgresql versioned packages
   apt:

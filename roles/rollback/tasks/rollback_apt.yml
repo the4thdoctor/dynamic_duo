@@ -36,8 +36,13 @@
     state: absent
 
 
-- name: remove the postgresql user and the home directory
+- name: remove the {{ pg_osuser }} user and the home directory
   user:
     name: "{{ pg_osuser }}"
     remove: yes
+    state: absent
+
+- name: Remove the group {{ pg_osgroup }} 
+  group:
+    name: "{{ pg_osgroup }}"
     state: absent

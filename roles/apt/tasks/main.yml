@@ -1,7 +1,13 @@
 ---
-- name: create the postgresql user and the home directory
+- name: Ensure group {{ pg_osgroup }} exists
+  group:
+    name: "{{ pg_osgroup }}"
+    state: present
+
+- name: create the {{ pg_osuser }} user and the home directory
   user:
     name: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
     create_home: yes
     move_home: yes
     home: "{{ pg_home_dir }}"

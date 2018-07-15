@@ -31,3 +31,11 @@
     block: "{{ lookup('pipe', 'ssh-keyscan -T 10 ' ~ hostvars[item]['inventory_hostname']) }}"
     marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
   with_items: "{{ groups.ssh }}"
+
+- name: Ship the ssh configuration file
+  template:
+    src: config.j2
+    dest: "{{ pg_home_dir }}/.ssh/config"
+    owner: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    mode: 0600

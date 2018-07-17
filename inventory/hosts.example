@@ -1,26 +1,10 @@
 [hosts]
-db01 srv_ip=192.168.1.21
-db02 srv_ip=192.168.1.24
 backupsrv srv_ip=192.168.1.22
-
-
-[pgsql]
-db01
-db02
-backupsrv
-
+db01 srv_ip=192.168.1.23
+db02 srv_ip=192.168.1.24
 
 [apt:children]
-pgsql
+hosts
 
-[rollback:children]
-apt
-pgsql
-
-
-[dbserver]
-db01
-db02
-
-[bckserver]
-backupsrv
+[ssh:children]
+hosts

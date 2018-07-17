@@ -1,7 +1,12 @@
-postgresql_common_include: "/etc/postgresql-common/createcluster.d"
+---
+pgdg_codename:
+  ascii: stretch
+
 pgsql_versions:
   - 9.6
   - 10
+  
+create_main_cluster: No
 
 
 pgsql_packages:

@@ -6,9 +6,7 @@
   remote_user: ansible
   become: yes
 
-
-
-- hosts: pgsql
+- hosts: ssh
   roles:
     - ssh
   remote_user: ansible

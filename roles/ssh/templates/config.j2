@@ -1,0 +1,5 @@
+{% for host in groups['ssh'] %}
+Host {{ hostvars[host]['inventory_hostname'] }}
+  User {{ hostvars[host]['pg_osuser'] }}
+  IdentityFile ~/.ssh/{{ hostvars[host]['ssh_key_file'] }}
+{% endfor %}

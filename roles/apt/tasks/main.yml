@@ -1,4 +1,20 @@
 ---
+- name: Ensure group {{ pg_osgroup }} exists
+  group:
+    name: "{{ pg_osgroup }}"
+    state: present
+
+- name: create the {{ pg_osuser }} user and the home directory
+  user:
+    name: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    create_home: yes
+    move_home: yes
+    home: "{{ pg_home_dir }}"
+    shell: "{{ pg_shell }}"
+    system: yes
+    state: present
+
 - name: Set the codename to the pgdg_codename translation or the lsb_release, whether it comes first
   set_fact:
     codename: "{{ pgdg_codename[ansible_lsb['codename']] | default(ansible_lsb['codename'])  }}"
@@ -18,19 +34,18 @@
     cache_valid_time: 86400
   with_items: "{{ common_packages }}"
 
-
 - name: create include directory for createcluster
   file:
-    path: "{{postgresql_common_include}}"
+    path: "{{ postgresql_common_include }}"
     owner: "{{ pg_osuser }}"
     group: "{{ pg_osgroup }}"
     state: directory
     mode: 0744
 
-- name: add create main_cluster false in custom configuration file
+- name: add create main_cluster line in custom configuration using the variable create_main_cluster
   lineinfile:
-    path: "{{postgresql_common_include}}/create_main.conf"
-    line: "create_main_cluster = false"
+    path: "{{postgresql_common_include}}/main_cluster.conf"
+    line: "create_main_cluster = {{ create_main_cluster }}"
     create: Yes
     owner: "{{ pg_osuser }}"
     group: "{{ pg_osgroup }}"

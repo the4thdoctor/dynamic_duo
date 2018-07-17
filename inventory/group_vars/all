@@ -1,7 +1,6 @@
 ---
-
-pgdg_codename:
-  ascii: stretch
-
+pg_home_dir: "/home/postgres"
+pg_shell: "/bin/bash"
 pg_osuser: "postgres"
 pg_osgroup: "postgres"
+postgresql_common_include: "/etc/postgresql-common/createcluster.d"

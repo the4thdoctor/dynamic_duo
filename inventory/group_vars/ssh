@@ -1,0 +1,5 @@
+---
+key_dest_dir: "keys/"
+ssh_key_bits: "2048"
+ssh_key_type: "rsa"
+ssh_key_file: "id_rsa"

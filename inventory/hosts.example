@@ -3,8 +3,19 @@ backupsrv srv_ip=192.168.1.22
 db01 srv_ip=192.168.1.23
 db02 srv_ip=192.168.1.24
 
+[dbserver]
+db01
+db02
+
+[bckserver]
+backupsrv
+
 [apt:children]
 hosts
 
 [ssh:children]
 hosts
+
+[pgsql:children]
+dbserver
+bckserver

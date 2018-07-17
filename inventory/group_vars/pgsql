@@ -1,3 +1,4 @@
+---
 data_area: "/var/lib/postgresql"
 log_directory: "/var/log/postgresql"
 wal_area: "/var/lib/postgresql/pg_wal"
@@ -16,17 +17,12 @@ pg_clusters:
         user: "all"
         address: "127.0.0.1/32"
         method: "md5"
-
-
   clu:
     version: "9.6"
     params:
       port: "5433"
       listen_addresses: "*"
       wal_level: "logical"
-
-
-
   flynn:
     version: "9.6"
     params:

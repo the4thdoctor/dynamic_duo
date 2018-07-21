@@ -8,6 +8,7 @@
   user:
     name: "{{ pg_osuser }}"
     group: "{{ pg_osgroup }}"
+    groups: "{{ pg_additional_groups }}"
     create_home: yes
     move_home: yes
     home: "{{ pg_home_dir }}"

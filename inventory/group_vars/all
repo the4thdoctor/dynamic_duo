@@ -3,4 +3,6 @@ pg_home_dir: "/home/postgres"
 pg_shell: "/bin/bash"
 pg_osuser: "postgres"
 pg_osgroup: "postgres"
+pg_additional_groups:
+  - "ssl-cert"
 postgresql_common_include: "/etc/postgresql-common/createcluster.d"

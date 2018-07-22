@@ -5,6 +5,7 @@ params:
   maintenance_work_mem: "30MB"
   max_connections: "50"
 
+pg_super_user: "postgres"
 
 pg_hba:
   - type: "local"

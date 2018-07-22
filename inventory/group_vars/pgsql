@@ -6,6 +6,7 @@ wal_area: "/var/lib/postgresql/pg_wal"
 pg_clusters:
   tron:
     version: "10"
+    pg_super_user: "sark"
     params:
       port: "5432"
       listen_addresses: "*"

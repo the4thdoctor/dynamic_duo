@@ -12,7 +12,7 @@
   remote_user: ansible
   become: yes
 
-- hosts: pgsql
+- hosts: dbserver
   roles:
     - pgsql
   remote_user: ansible

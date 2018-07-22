@@ -28,10 +28,26 @@
     mode: 0744
   with_dict: "{{ pg_clusters}}"
 
+- name: Create the files with the postgresql super user password
+  lineinfile:
+    owner: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    mode: 0600
+    dest: "{{ pg_home_dir }}/.pg_super_pwd_{{item.key}}"
+    line: "{{ item.value.pg_super_password|default(pg_super_password) }}"
+    create: yes
+  with_dict: "{{ pg_clusters }}"
+
 - name: Initialise the postgresql clusters
-  command: "pg_createcluster  -u {{ pg_osuser }}  -l {{ item.value.log_directory|default(log_directory) }}/postgresql-{{item.value.version}}-{{item.key}}.log -p {{ item.value.params.port}} -d {{ item.value.data_area|default(data_area) }}/{{item.value.version}}/{{item.key}}  {{item.value.version}} {{item.key}}  -- -X {{ item.value.wal_area|default(wal_area) }}/{{item.value.version}}/{{item.key}}"
+  command: "pg_createcluster  -u {{ pg_osuser }}  -l {{ item.value.log_directory|default(log_directory) }}/postgresql-{{item.value.version}}-{{item.key}}.log -p {{ item.value.params.port}} -d {{ item.value.data_area|default(data_area) }}/{{item.value.version}}/{{item.key}}  {{item.value.version}} {{item.key}}  -- -X {{ item.value.wal_area|default(wal_area) }}/{{item.value.version}}/{{item.key}} -U {{ item.value.pg_super_user|default(pg_super_user) }} --pwfile={{ pg_home_dir }}/.pg_super_pwd_{{item.key}} "
   args:
     creates: "{{ item.value.data_area|default(data_area) }}/{{item.value.version}}/{{item.key}}/PG_VERSION"
+  with_dict: "{{ pg_clusters}}"
+
+- name: Remove the the files with the postgresql super user password
+  file:
+    path: "{{ pg_home_dir }}/.pg_super_pwd_{{item.key}}"
+    state: absent
   with_dict: "{{ pg_clusters}}"
 
 

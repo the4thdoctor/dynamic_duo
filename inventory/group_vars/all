@@ -3,6 +3,19 @@ pg_home_dir: "/home/postgres"
 pg_shell: "/bin/bash"
 pg_osuser: "postgres"
 pg_osgroup: "postgres"
+pg_super_user: "postgres"
+# The pg_super_password is "flynn_lives". The valut password is "postgres."
+# You may want to change this with a pair of stronger database and valut passwords
+# Check https://docs.ansible.com/ansible/2.5/user_guide/vault.html for vault's usage
+pg_super_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          30313235613232653662306165306430383737646461333032303063373238646334363265326162
+          6136636134383332336562386464363735323233656337620a663961343239303131316266346431
+          39633032333035613331313136313962626634656637656431346436626532303266653333313435
+          3134633031373431620a623937386564346538663062643936353432643835383965616539623731
+          3639
+
+
 pg_additional_groups:
   - "ssl-cert"
 postgresql_common_include: "/etc/postgresql-common/createcluster.d"

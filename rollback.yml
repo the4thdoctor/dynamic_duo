@@ -1,5 +1,5 @@
 ---
-- hosts: rollback
+- hosts: hosts
   roles:
     - rollback
   remote_user: ansible

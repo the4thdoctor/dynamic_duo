@@ -1,4 +1,18 @@
 ---
+- name: Build the list of the PostgreSQL defined ports
+  set_fact:
+    pg_ports: "{{ pg_ports |default([]) + [item.value.params.port] }}"
+  with_dict: "{{ pg_clusters }}"
+
+
+- name: Check the port is unique within the clusters
+  assert:
+    that: >
+          pg_ports | count
+          ==
+          pg_ports | unique | count
+    msg: "Duplicated port in the cluster definition. Please fix the cluster configuration variable pg_clusters in group_vars or in hosts_vars."
+
 - name: Create the postgresql data area
   file:
     path: "{{ item.value.data_area|default(data_area) }}/{{item.value.version}}/{{item.key}}"
@@ -16,7 +30,7 @@
     group: "{{ pg_osgroup }}"
     state: directory
     mode: 0700
-  with_dict: "{{ pg_clusters}}"
+  with_dict: "{{ pg_clusters }}"
 
 
 - name: Create the postgresql log directory

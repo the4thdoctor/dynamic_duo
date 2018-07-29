@@ -4,7 +4,7 @@ pg_shell: "/bin/bash"
 pg_osuser: "postgres"
 pg_osgroup: "postgres"
 pg_super_user: "postgres"
-# The pg_super_password is "flynn_lives". The valut password is "postgres."
+# The pg_super_password is "flynn_lives". The vault password is "postgres."
 # You may want to change this with a pair of stronger database and valut passwords
 # Check https://docs.ansible.com/ansible/2.5/user_guide/vault.html for vault's usage
 pg_super_password: !vault |

@@ -1,0 +1,8 @@
+- name: creating the database directories for the cluster {{ db_cluster.key }}
+  file:
+    path: "{{ item.value }}/{{db_cluster.value.version}}/{{db_cluster.key}}/"
+    owner: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    state: directory
+    mode: 0700
+  with_dict: "{{ pg_dirs| combine(db_cluster.value.pg_dirs|default(pg_dirs)) }}"

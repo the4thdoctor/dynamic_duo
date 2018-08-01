@@ -1,0 +1,6 @@
+- name: removing the database directories for the cluster {{ db_cluster.key }}
+  file:
+    path: "{{ item.value }}/{{db_cluster.value.version}}/"
+    state: absent
+    force: yes
+  with_dict: "{{ pg_dirs| combine(db_cluster.value.pg_dirs|default(pg_dirs)) }}"

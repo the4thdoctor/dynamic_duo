@@ -3,8 +3,17 @@ data_area: "/var/lib/postgresql"
 log_directory: "/var/log/postgresql"
 wal_area: "/var/lib/postgresql/pg_wal"
 
+pg_dirs:
+  data_area: "/var/lib/postgresql"
+  log_directory: "/var/log/postgresql"
+  wal_area: "/var/lib/postgresql/pg_wal"
+
+
 pg_clusters:
   tron:
+    pg_dirs:
+      data_area: "/pg_data"
+      log_directory: "/pg_log"
     version: "10"
     pg_super_user: "sark"
     params:

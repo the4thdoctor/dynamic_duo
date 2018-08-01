@@ -4,22 +4,8 @@
   with_dict: "{{ pg_clusters}}"
   ignore_errors: Yes
 
-- name: Remove the postgresql directories
-  file:
-    path: "{{ item.value.data_area|default(data_area) }}"
-    state: absent
-  with_dict: "{{ pg_clusters}}"
-
-
-- name: Remove the postgresql wal area
-  file:
-    path: "{{ item.value.wal_area|default(wal_area) }}"
-    state: absent
-  with_dict: "{{ pg_clusters}}"
-
-
-- name: Remove the postgresql log directory
-  file:
-    path: "{{ item.value.log_directory|default(log_directory) }}"
-    state: absent
-  with_dict: "{{ pg_clusters}}"
+- name: remove the database directories
+  include: destroy_db_dir.yml
+  with_dict: "{{ pg_clusters }}"
+  loop_control:
+    loop_var: db_cluster

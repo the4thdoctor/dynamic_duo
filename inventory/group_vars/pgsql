@@ -12,7 +12,7 @@ log_rotate:
   mode: "weekly"
   keep: "10"
 
-logrotate_file: "/etc/logrotate.d/pgsql_custom" 
+
 
 pg_clusters:
   tron:

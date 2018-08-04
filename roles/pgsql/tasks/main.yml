@@ -29,7 +29,7 @@
   with_dict: "{{ pg_clusters }}"
 
 - name: Initialise the postgresql clusters
-  command: "pg_createcluster  -u {{ pg_osuser }}  -l {{ item.value.log_directory|default(log_directory) }}/postgresql-{{item.value.version}}-{{item.key}}.log -p {{ item.value.params.port}} -d {{ item.value.data_area|default(data_area) }}/{{item.value.version}}/{{item.key}}  {{item.value.version}} {{item.key}}  -- -X {{ item.value.wal_area|default(wal_area) }}/{{item.value.version}}/{{item.key}} -U {{ item.value.pg_super_user|default(pg_super_user) }} --pwfile={{ pg_home_dir }}/.pg_super_pwd_{{item.key}} "
+  command: "pg_createcluster  -u {{ pg_osuser }}  -l {{ item.value.log_directory|default(log_directory) }}/{{item.value.version}}/{{item.key}}/postgresql-{{item.value.version}}-{{item.key}}.log -p {{ item.value.params.port}} -d {{ item.value.data_area|default(data_area) }}/{{item.value.version}}/{{item.key}}  {{item.value.version}} {{item.key}}  -- -X {{ item.value.wal_area|default(wal_area) }}/{{item.value.version}}/{{item.key}} -U {{ item.value.pg_super_user|default(pg_super_user) }} --pwfile={{ pg_home_dir }}/.pg_super_pwd_{{item.key}} "
   args:
     creates: "{{ item.value.data_area|default(data_area) }}/{{item.value.version}}/{{item.key}}/PG_VERSION"
   with_dict: "{{ pg_clusters}}"
@@ -80,7 +80,7 @@
 - name: Ship the  logrotate configuration to the servers
   template:
     src: logrotate_pgsql.j2
-    dest: "/etc/logrotate.d/pgsql_custom"
+    dest: "{{ logrotate_file }}"
     owner: "{{ pg_osuser }}"
     group: "{{ pg_osgroup }}"
     mode: 0644

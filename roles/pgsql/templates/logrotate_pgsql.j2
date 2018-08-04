@@ -1,7 +1,8 @@
 {%for cluster in pg_clusters %}
-{% set rotate_conf = cluster.log_rotate|default(log_rotate) %}
-{% set cluster_dirs = cluster.pg_dirs|default(pg_dirs) %}
-{{ cluster_dirs.log_directory }}/*.log {
+{% set rotate_conf = log_rotate|combine(pg_clusters[cluster].log_rotate|default(log_rotate)) %}
+{% set cluster_dirs = pg_dirs|combine(pg_clusters[cluster].pg_dirs|default(pg_dirs)) %}
+# {{cluster}}
+{{ cluster_dirs.log_directory }}/{{pg_clusters[cluster].version}}/{{cluster}}/*.log {
        {{ rotate_conf.mode }}
        rotate {{ rotate_conf.keep }}
        copytruncate

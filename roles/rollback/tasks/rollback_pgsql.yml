@@ -9,3 +9,8 @@
   with_dict: "{{ pg_clusters }}"
   loop_control:
     loop_var: db_cluster
+
+- name: remove the logrotate files
+  file:
+    path: "{{ logrotate_file }}"
+    state: absent

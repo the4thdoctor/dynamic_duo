@@ -8,6 +8,10 @@ pg_dirs:
   log_directory: "/var/log/postgresql"
   wal_area: "/var/lib/postgresql/pg_wal"
 
+log_rotate:
+  mode: "weekly"
+  keep: "10"
+
 
 pg_clusters:
   tron:
@@ -21,6 +25,9 @@ pg_clusters:
       listen_addresses: "*"
     data_area: "/pg_data"
     log_directory: "/pg_log"
+    log_rotate:
+      mode: "daily"
+      keep: "31"
     pg_hba:
       - type: "host"
         database: "all"

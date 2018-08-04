@@ -1,0 +1,14 @@
+{%for cluster in pg_clusters %}
+{% set rotate_conf = cluster.log_rotate|default(log_rotate) %}
+{% set cluster_dirs = cluster.pg_dirs|default(pg_dirs) %}
+{{ cluster_dirs.log_directory }}/*.log {
+       {{ rotate_conf.mode }}
+       rotate {{ rotate_conf.keep }}
+       copytruncate
+       delaycompress
+       compress
+       notifempty
+       missingok
+       su root root
+}
+{% endfor %}

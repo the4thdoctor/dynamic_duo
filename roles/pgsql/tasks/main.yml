@@ -10,7 +10,7 @@
           pg_ports | count
           ==
           pg_ports | unique | count
-    msg: "Duplicated port in the cluster definition. Please fix the cluster configuration variable pg_clusters in group_vars or in hosts_vars."
+    msg: "Duplicated port detected in the cluster definition. Please check the variable pg_clusters in group_vars or in hosts_vars for any duplicated port."
 
 - name: create the database directories
   include: create_db_dir.yml
@@ -76,6 +76,14 @@
     group: "{{ pg_osgroup }}"
     mode: 0644
   with_dict: "{{ pg_clusters}}"
+
+- name: Ship the  logrotate configuration to the servers
+  template:
+    src: logrotate_pgsql.j2
+    dest: "/etc/logrotate.d/pgsql_custom"
+    owner: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    mode: 0644
 
 
 - name: Start the postgresql service

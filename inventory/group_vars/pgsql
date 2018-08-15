@@ -20,7 +20,7 @@ pg_clusters:
       data_area: "/pg_data"
       log_directory: "/pg_log"
     version: "10"
-    pg_super_user: "sark"
+    pg_super_user: "alan1"
     locale: "en_US.UTF-8"
     params:
       port: "5432"
@@ -31,6 +31,11 @@ pg_clusters:
       mode: "daily"
       keep: "31"
     pg_hba:
+      - type: "local"
+        database: "all"
+        user: "all"
+        address: ""
+        method: "md5"
       - type: "host"
         database: "all"
         user: "all"
@@ -44,12 +49,14 @@ pg_clusters:
 
   clu:
     version: "9.6"
+    pg_super_user: "flynn"
     params:
       port: "5433"
       listen_addresses: "*"
       wal_level: "logical"
-  flynn:
+  sark:
     version: "9.6"
+    pg_super_user: "mcp"
     params:
       port: "5434"
       listen_addresses: "*"

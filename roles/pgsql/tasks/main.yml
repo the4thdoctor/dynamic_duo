@@ -96,6 +96,18 @@
     group: "{{ pg_osgroup }}"
     mode: 0644
 
+- name: populate the pgpass file with the postgres super users connection data
+  blockinfile:
+    dest: "{{ pg_home_dir }}/.pgpass"
+    create: yes
+    state: present
+    owner: "{{ pg_osuser }}"
+    mode: 0600
+    block: |
+     localhost:{{ item.value.params.port }}:*:{{ item.value.pg_super_user|default(pg_super_user) }}:{{ item.value.pg_super_password|default(pg_super_password) }}
+     *:{{ item.value.params.port }}:*:{{ item.value.pg_super_user|default(pg_super_user) }}:{{ item.value.pg_super_password|default(pg_super_password) }}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK SUPER USER FOR cluster {{ item.key }}:{{ item.value.params.port }}"
+  with_dict: "{{ pg_clusters }}"
 
 - name: Start the postgresql service
   service:

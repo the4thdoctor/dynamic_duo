@@ -30,6 +30,18 @@ pg_clusters:
     log_rotate:
       mode: "daily"
       keep: "31"
+    pg_hba:
+      - type: "host"
+        database: "all"
+        user: "all"
+        address: "127.0.0.1/32"
+        method: "md5"
+      - type: "host"
+        database: "all"
+        user: "all"
+        address: "::1/128"
+        method: "md5"
+
   clu:
     version: "9.6"
     params:

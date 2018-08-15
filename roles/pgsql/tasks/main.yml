@@ -12,6 +12,17 @@
           pg_ports | unique | count
     msg: "Duplicated port detected in the cluster definition. Please check the variable pg_clusters in group_vars or in hosts_vars for any duplicated port."
 
+- name: build a list of encoding to be installed on the server
+  set_fact:
+    db_locale: "{{ (db_locale|default([])  +  [item.value.locale|default(default_locale)])|unique }}"
+  with_dict: "{{ pg_clusters }}"
+
+- name: Ensure the locale required by the clusters exists
+  locale_gen:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ db_locale }}"
+
 - name: create the database directories
   include: create_db_dir.yml
   with_dict: "{{ pg_clusters }}"
@@ -29,7 +40,7 @@
   with_dict: "{{ pg_clusters }}"
 
 - name: Initialise the postgresql clusters
-  command: "pg_createcluster  -u {{ pg_osuser }}  -l {{ item.value.log_directory|default(log_directory) }}/{{item.value.version}}/{{item.key}}/postgresql-{{item.value.version}}-{{item.key}}.log -p {{ item.value.params.port}} -d {{ item.value.data_area|default(data_area) }}/{{item.value.version}}/{{item.key}}  {{item.value.version}} {{item.key}}  -- -X {{ item.value.wal_area|default(wal_area) }}/{{item.value.version}}/{{item.key}} -U {{ item.value.pg_super_user|default(pg_super_user) }} --pwfile={{ pg_home_dir }}/.pg_super_pwd_{{item.key}} "
+  command: "pg_createcluster --locale {{ item.value.locale|default(default_locale) }} -u {{ pg_osuser }}  -l {{ item.value.log_directory|default(log_directory) }}/{{item.value.version}}/{{item.key}}/postgresql-{{item.value.version}}-{{item.key}}.log -p {{ item.value.params.port}} -d {{ item.value.data_area|default(data_area) }}/{{item.value.version}}/{{item.key}}  {{item.value.version}} {{item.key}}  -- -X {{ item.value.wal_area|default(wal_area) }}/{{item.value.version}}/{{item.key}} -U {{ item.value.pg_super_user|default(pg_super_user) }} --pwfile={{ pg_home_dir }}/.pg_super_pwd_{{item.key}} "
   args:
     creates: "{{ item.value.data_area|default(data_area) }}/{{item.value.version}}/{{item.key}}/PG_VERSION"
   with_dict: "{{ pg_clusters}}"

@@ -19,4 +19,6 @@ pg_super_password: !vault |
 pg_additional_groups:
   - "ssl-cert"
 postgresql_common_include: "/etc/postgresql-common/createcluster.d"
-logrotate_file: "/etc/logrotate.d/pgsql_custom" 
+logrotate_file: "/etc/logrotate.d/pgsql_custom"
+
+default_locale: "en_GB.UTF-8"

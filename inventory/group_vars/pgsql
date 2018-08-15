@@ -21,6 +21,7 @@ pg_clusters:
       log_directory: "/pg_log"
     version: "10"
     pg_super_user: "sark"
+    locale: "en_US.UTF-8"
     params:
       port: "5432"
       listen_addresses: "*"
@@ -29,12 +30,6 @@ pg_clusters:
     log_rotate:
       mode: "daily"
       keep: "31"
-    pg_hba:
-      - type: "host"
-        database: "all"
-        user: "all"
-        address: "127.0.0.1/32"
-        method: "md5"
   clu:
     version: "9.6"
     params:

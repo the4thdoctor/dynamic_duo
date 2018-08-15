@@ -109,6 +109,24 @@
     marker: "# {mark} ANSIBLE MANAGED BLOCK SUPER USER FOR cluster {{ item.key }}:{{ item.value.params.port }}"
   with_dict: "{{ pg_clusters }}"
 
+- name: populate the pg_service file with the postgres super users connection data
+  blockinfile:
+    dest: "{{ pg_home_dir }}/.pg_service.conf"
+    create: yes
+    state: present
+    owner: "{{ pg_osuser }}"
+    mode: 0600
+    block: |
+      [{{ item.key }}]
+      host=localhost
+      port={{ item.value.params.port }}
+      user={{ item.value.pg_super_user|default(pg_super_user) }}
+      dbname=template1
+
+    marker: "# {mark} ANSIBLE MANAGED BLOCK SUPER USER FOR cluster {{ item.key }}:{{ item.value.params.port }}"
+  with_dict: "{{ pg_clusters }}"
+
+
 - name: Start the postgresql service
   service:
     name: postgresql

@@ -3,6 +3,9 @@ pg_home_dir: "/home/postgres"
 pg_shell: "/bin/bash"
 pg_osuser: "postgres"
 pg_osgroup: "postgres"
+pg_additional_groups:
+  - "ssl-cert"
+
 pg_super_user: "postgres"
 # The pg_super_password is "flynn_lives". The vault password is "postgres."
 # You may want to change this with a pair of stronger database and valut passwords
@@ -15,10 +18,67 @@ pg_super_password: !vault |
           3134633031373431620a623937386564346538663062643936353432643835383965616539623731
           3639
 
-
-pg_additional_groups:
-  - "ssl-cert"
 postgresql_common_include: "/etc/postgresql-common/createcluster.d"
 logrotate_file: "/etc/logrotate.d/pgsql_custom"
 
 default_locale: "en_GB.UTF-8"
+
+data_area: "/var/lib/postgresql"
+log_directory: "/var/log/postgresql"
+wal_area: "/var/lib/postgresql/pg_wal"
+
+pg_dirs:
+  data_area: "/var/lib/postgresql"
+  log_directory: "/var/log/postgresql"
+  wal_area: "/var/lib/postgresql/pg_wal"
+
+log_rotate:
+  mode: "weekly"
+  keep: "10"
+
+pg_clusters:
+  tron:
+    pg_dirs:
+      data_area: "/pg_data"
+      log_directory: "/pg_log"
+    version: "10"
+    pg_super_user: "alan1"
+    locale: "en_US.UTF-8"
+    params:
+      port: "5432"
+      listen_addresses: "*"
+    data_area: "/pg_data"
+    log_directory: "/pg_log"
+    log_rotate:
+      mode: "daily"
+      keep: "31"
+    pg_hba:
+      - type: "local"
+        database: "all"
+        user: "all"
+        address: ""
+        method: "md5"
+      - type: "host"
+        database: "all"
+        user: "all"
+        address: "127.0.0.1/32"
+        method: "md5"
+      - type: "host"
+        database: "all"
+        user: "all"
+        address: "::1/128"
+        method: "md5"
+  clu:
+    version: "9.6"
+    pg_super_user: "flynn"
+    params:
+      port: "5433"
+      listen_addresses: "*"
+      wal_level: "logical"
+  sark:
+    version: "9.6"
+    pg_super_user: "mcp"
+    params:
+      port: "5434"
+      listen_addresses: "*"
+      wal_level: "replica"

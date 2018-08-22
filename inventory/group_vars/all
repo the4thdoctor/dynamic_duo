@@ -5,9 +5,10 @@ pg_osuser: "postgres"
 pg_osgroup: "postgres"
 pg_additional_groups:
   - "ssl-cert"
+postgresql_common_include: "/etc/postgresql-common/createcluster.d"
 
 pg_super_user: "postgres"
-# The pg_super_password is "flynn_lives". The vault password is "postgres."
+# The pg_super_password is "flynn_lives". The vault password is "postgres".
 # You may want to change this with a pair of stronger database and valut passwords
 # Check https://docs.ansible.com/ansible/2.5/user_guide/vault.html for vault's usage
 pg_super_password: !vault |
@@ -18,11 +19,8 @@ pg_super_password: !vault |
           3134633031373431620a623937386564346538663062643936353432643835383965616539623731
           3639
 
-postgresql_common_include: "/etc/postgresql-common/createcluster.d"
 logrotate_file: "/etc/logrotate.d/pgsql_custom"
-
 default_locale: "en_GB.UTF-8"
-
 data_area: "/var/lib/postgresql"
 log_directory: "/var/log/postgresql"
 wal_area: "/var/lib/postgresql/pg_wal"

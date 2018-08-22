@@ -9,7 +9,7 @@ postgresql_common_include: "/etc/postgresql-common/createcluster.d"
 
 pg_super_user: "postgres"
 # The pg_super_password is "flynn_lives". The vault password is "postgres".
-# You may want to change this with a pair of stronger database and valut passwords
+# You may want to change this with a pair of stronger database and vault passwords
 # Check https://docs.ansible.com/ansible/2.5/user_guide/vault.html for vault's usage
 pg_super_password: !vault |
           $ANSIBLE_VAULT;1.1;AES256

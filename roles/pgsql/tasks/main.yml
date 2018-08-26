@@ -51,7 +51,7 @@
     --
     -X {{ item.value.wal_area|default(wal_area) }}/{{item.value.version}}/{{item.key}}
     -U {{ item.value.pg_super_user|default(pg_super_user) }}
-    --pwfile={{ pg_home_dir }}/.pg_super_pwd_{{item.key}} 
+    --pwfile={{ pg_home_dir }}/.pg_super_pwd_{{item.key}}
   args:
     creates: "{{ item.value.data_area|default(data_area) }}/{{item.value.version}}/{{item.key}}/PG_VERSION"
   with_dict: "{{ pg_clusters}}"
@@ -84,7 +84,7 @@
 - name: Ship the custom postgresql.conf in conf.d
   template:
     src: postgresql.conf.j2
-    dest: "/etc/postgresql/{{item.value.version}}/{{item.key}}/conf.d/postgresql.conf"
+    dest: "/etc/postgresql/{{item.value.version}}/{{item.key}}/conf.d/01postgresql.conf"
     owner: "{{ pg_osuser }}"
     group: "{{ pg_osgroup }}"
     mode: 0644

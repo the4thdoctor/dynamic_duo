@@ -37,4 +37,4 @@ The actions from the roles can be rolled back individually passing the appropria
 
 * [Branch 01_install](http://www.pgdba.org/post/2018/06/modern_times/)
 * [Branch 02_ssh_config](http://www.pgdba.org/post/2018/07/keep_talking/)
-* Branch 03_pgsql_config TBA
+* [Branch 03_pgsql_config] (http://www.pgdba.org/post/2018/08/mechanical_elephant/)

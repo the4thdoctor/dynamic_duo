@@ -21,3 +21,6 @@ hosts
 [pgsql:children]
 dbserver
 bckserver
+
+[pgbackrest:children]
+pgsql

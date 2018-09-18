@@ -3,7 +3,8 @@ pg_backrest:
   backup_server: backupsrv
   primary: db01
   secondary: db02
-  
+  repository: /pg_backrest/
+pgbackrest_conf: "/etc/pgbackrest.conf"
 pg_home_dir: "/home/postgres"
 pg_shell: "/bin/bash"
 pg_osuser: "postgres"
@@ -26,9 +27,6 @@ pg_super_password: !vault |
 
 logrotate_file: "/etc/logrotate.d/pgsql_custom"
 default_locale: "en_GB.UTF-8"
-data_area: "/var/lib/postgresql"
-log_directory: "/var/log/postgresql"
-wal_area: "/var/lib/postgresql/pg_wal"
 
 pg_dirs:
   data_area: "/var/lib/postgresql"
@@ -41,6 +39,10 @@ log_rotate:
 
 pg_clusters:
   tron:
+    pg_backrest:
+      backup_server: backupsrv
+      primary: db02
+      secondary: db01
     pg_dirs:
       data_area: "/pg_data"
       log_directory: "/pg_log"

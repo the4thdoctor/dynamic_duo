@@ -1,0 +1,8 @@
+---
+- name: deploy pgbackrest.conf
+  template:
+    src: pgbackrest.conf.j2
+    dest: "{{ pgbackrest_conf }}"
+    owner: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    mode: 0644

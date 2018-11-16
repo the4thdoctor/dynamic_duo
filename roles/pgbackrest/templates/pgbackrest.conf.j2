@@ -1,0 +1,13 @@
+[global]
+repo_path={{ pg_backrest.repository }}
+{% if ansible_fqdn in groups['bckserver'] %}
+
+
+{% else %}
+{% for cluster in pg_clusters %}
+
+[{{cluster}}]
+db-path={{ (pg_clusters[cluster]["pg_dirs"]| default(pg_dirs))["data_area"] }}/{{pg_clusters[cluster]["version"]}}/{{cluster}}
+db-port={{pg_clusters[cluster]["params"]["port"]}}
+{% endfor %}
+{% endif %}

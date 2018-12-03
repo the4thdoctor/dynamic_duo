@@ -40,7 +40,7 @@ log_rotate:
 pg_clusters:
   tron:
     pg_backrest:
-      backup_server: backupsrv
+      backup_server: backupsrv2
       primary: db02
       secondary: db01
     pg_dirs:

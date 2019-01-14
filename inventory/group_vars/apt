@@ -5,6 +5,7 @@ pgdg_codename:
 pgsql_versions:
   - 9.6
   - 10
+  - 11
 
 create_main_cluster: No
 

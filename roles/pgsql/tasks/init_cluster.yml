@@ -1,0 +1,20 @@
+- name: Create the database directory dictionary for the cluster {{ db_cluster.key }}
+  set_fact:
+    db_dir: "{{ pg_dirs| combine(db_cluster.value.pg_dirs|default(pg_dirs)) }}"
+
+
+- name: initialising the cluster {{ db_cluster.key }}
+  command: |
+    pg_createcluster
+    --locale {{ db_cluster.value.locale|default(default_locale) }}
+    -u {{ pg_osuser }}
+    -l {{ db_dir.log_directory }}/{{db_cluster.value.version}}/{{db_cluster.key}}/postgresql-{{db_cluster.value.version}}-{{db_cluster.key}}.log
+    -p {{ db_cluster.value.params.port}}
+    -d {{ db_dir.data_area }}/{{db_cluster.value.version}}/{{db_cluster.key}}
+    {{db_cluster.value.version}} {{db_cluster.key}}
+    --
+    -X {{ db_dir.wal_area }}/{{db_cluster.value.version}}/{{db_cluster.key}}
+    -U {{ db_cluster.value.pg_super_user|default(pg_super_user) }}
+    --pwfile={{ pg_home_dir }}/.pg_super_pwd_{{db_cluster.key}}
+  args:
+    creates: "{{ db_dir.data_area }}/{{db_cluster.value.version}}/{{db_cluster.key}}/PG_VERSION"

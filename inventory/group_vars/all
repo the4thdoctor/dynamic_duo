@@ -46,7 +46,7 @@ pg_clusters:
     pg_dirs:
       data_area: "/pg_data"
       log_directory: "/pg_log"
-    version: "10"
+    version: "11"
     pg_super_user: "alan1"
     locale: "en_US.UTF-8"
     params:
@@ -81,7 +81,7 @@ pg_clusters:
       listen_addresses: "*"
       wal_level: "logical"
   sark:
-    version: "9.6"
+    version: "10"
     pg_super_user: "mcp"
     params:
       port: "5434"

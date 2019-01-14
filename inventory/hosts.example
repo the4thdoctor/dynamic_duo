@@ -10,8 +10,6 @@ db02
 [bckserver]
 backupsrv
 
-
-
 [apt:children]
 hosts
 

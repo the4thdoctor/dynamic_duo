@@ -1,0 +1,11 @@
+- name: remove the pgbackrest repository
+  file:
+    path: "{{ pg_backrest.repository }}"
+    state: absent
+    mode: 0700
+  when: inventory_hostname in groups['bckserver']
+
+- name: remove the logrotate for pgbackrest
+  file:
+    path: "{{ logrotate_pgbackrest }}"
+    state: absent

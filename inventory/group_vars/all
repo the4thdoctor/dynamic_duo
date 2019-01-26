@@ -1,9 +1,34 @@
 ---
+pgdg_codename:
+  ascii: stretch
+
+create_main_cluster: No
+
+pgsql_packages:
+- postgresql-
+- postgresql-client-
+- postgresql-contrib-
+
+common_packages:
+  - postgresql-client-common
+  - postgresql-common
+  - pgbackrest
+  - python-psycopg2
+  - locales
+  - mutt
+
 pg_backrest:
   backup_server: backupsrv
   primary: db01
   secondary: db02
   repository: /pg_backrest/
+  recovery_option:
+    - "standby_mode=on"
+  log_rotate:
+    mode: "daily"
+    keep: "31"
+
+
 pgbackrest_conf: "/etc/pgbackrest.conf"
 pg_home_dir: "/home/postgres"
 pg_shell: "/bin/bash"
@@ -25,7 +50,17 @@ pg_super_password: !vault |
           3134633031373431620a623937386564346538663062643936353432643835383965616539623731
           3639
 
-logrotate_file: "/etc/logrotate.d/pgsql_custom"
+smtp_username: foo@bar.local
+smtp_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          31323834643366356363313035643263333738393537353730306361303534656435323639333365
+          3432393736313835653264353332373464333337373964630a363164366635323162666434633961
+          63643435366632363033616666363635656537353066326537613066616261306663613731323966
+          3232643235643263390a396632386461613932616262346430636538353864316637366334353634
+          34343339386438613332306639323366393265363736636630376436343965636366
+
+logrotate_pgsql: "/etc/logrotate.d/pgsql_custom"
+logrotate_pgbackrest: "/etc/logrotate.d/pgbackrest_custom"
 default_locale: "en_GB.UTF-8"
 
 pg_dirs:
@@ -39,15 +74,10 @@ log_rotate:
 
 pg_clusters:
   tron:
-    pg_backrest:
-      backup_server: backupsrv2
-      primary: db02
-      secondary: db01
     pg_dirs:
       data_area: "/pg_data"
       log_directory: "/pg_log"
     version: "11"
-    pg_super_user: "alan1"
     locale: "en_US.UTF-8"
     params:
       port: "5432"
@@ -57,32 +87,14 @@ pg_clusters:
     log_rotate:
       mode: "daily"
       keep: "31"
-    pg_hba:
-      - type: "local"
-        database: "all"
-        user: "all"
-        address: ""
-        method: "md5"
-      - type: "host"
-        database: "all"
-        user: "all"
-        address: "127.0.0.1/32"
-        method: "md5"
-      - type: "host"
-        database: "all"
-        user: "all"
-        address: "::1/128"
-        method: "md5"
   clu:
     version: "9.6"
-    pg_super_user: "flynn"
     params:
       port: "5433"
       listen_addresses: "*"
       wal_level: "logical"
   sark:
     version: "10"
-    pg_super_user: "mcp"
     params:
       port: "5434"
       listen_addresses: "*"

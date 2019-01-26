@@ -1,4 +1,9 @@
 ---
+- name: build a list of encoding to be installed on the server
+  set_fact:
+    pgsql_versions: "{{ (pgsql_versions|default([])  +  [item.value.version])|unique }}"
+  with_dict: "{{ pg_clusters }}"
+
 - name: drop the main postgresql clusters
   command: "pg_dropcluster --stop {{ item }} main"
   with_items: "{{ pgsql_versions }}"
@@ -42,7 +47,7 @@
     remove: yes
     state: absent
 
-- name: Remove the group {{ pg_osgroup }} 
+- name: Remove the group {{ pg_osgroup }}
   group:
     name: "{{ pg_osgroup }}"
     state: absent

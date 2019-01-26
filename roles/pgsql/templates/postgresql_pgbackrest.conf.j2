@@ -1,0 +1,4 @@
+max_wal_senders=3
+wal_level='replica'
+archive_mode='on'
+archive_command = 'pgbackrest --stanza={{item.key}} archive-push %p'

@@ -10,7 +10,7 @@
   loop_control:
     loop_var: db_cluster
 
-- name: remove the logrotate files
+- name: remove the logrotate for postgresql
   file:
-    path: "{{ logrotate_file }}"
+    path: "{{ logrotate_pgsql }}"
     state: absent

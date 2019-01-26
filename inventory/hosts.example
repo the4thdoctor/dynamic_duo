@@ -1,7 +1,7 @@
 [hosts]
-backupsrv srv_ip=192.168.1.22
-db01 srv_ip=192.168.1.23
-db02 srv_ip=192.168.1.24
+backupsrv srv_ip=192.168.56.22
+db01 srv_ip=192.168.56.23
+db02 srv_ip=192.168.56.24
 
 [dbserver]
 db01
@@ -11,7 +11,7 @@ db02
 backupsrv
 
 [apt:children]
-hosts
+pgsql
 
 [ssh:children]
 hosts

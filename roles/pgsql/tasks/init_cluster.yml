@@ -14,7 +14,7 @@
     {{db_cluster.value.version}} {{db_cluster.key}}
     --
     -X {{ db_dir.wal_area }}/{{db_cluster.value.version}}/{{db_cluster.key}}
-    -U {{ db_cluster.value.pg_super_user|default(pg_super_user) }}
+    -U {{ pg_osuser }}
     --pwfile={{ pg_home_dir }}/.pg_super_pwd_{{db_cluster.key}}
   args:
     creates: "{{ db_dir.data_area }}/{{db_cluster.value.version}}/{{db_cluster.key}}/PG_VERSION"

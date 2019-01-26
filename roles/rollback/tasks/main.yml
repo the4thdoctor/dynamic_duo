@@ -7,3 +7,5 @@
   when: rbk_apt | default(False) or rbk_all| default(False)
 - include: rollback_hosts.yml
   when: rbk_hosts | default(False) or rbk_all| default(False)
+- include: rollback_pgbackrest.yml
+  when: rbk_pgbackrest | default(False) or rbk_all| default(False)

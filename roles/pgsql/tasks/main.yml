@@ -12,17 +12,6 @@
           pg_ports | unique | count
     msg: "Duplicated port detected in the cluster definition. Please check the variable pg_clusters in group_vars or in hosts_vars for any duplicated port."
 
-- name: build a list of encoding to be installed on the server
-  set_fact:
-    db_locale: "{{ (db_locale|default([])  +  [item.value.locale|default(default_locale)])|unique }}"
-  with_dict: "{{ pg_clusters }}"
-
-- name: Ensure the locale required by the clusters exists
-  locale_gen:
-    name: "{{ item }}"
-    state: present
-  with_items: "{{ db_locale }}"
-
 - name: create the database directories
   include: create_db_dir.yml
   with_dict: "{{ pg_clusters }}"
@@ -81,7 +70,18 @@
     mode: 0644
   with_dict: "{{ pg_clusters}}"
 
-- name: Ship the  pg_hba.conf in cluster's config directory
+- name: Ship the custom pgbackrest.conf in conf.d
+  template:
+    src: postgresql_pgbackrest.conf.j2
+    dest: "/etc/postgresql/{{item.value.version}}/{{item.key}}/conf.d/99postgresql_pgbackrest.conf"
+    owner: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    mode: 0644
+  with_dict: "{{ pg_clusters}}"
+  when: inventory_hostname in groups['dbserver']
+
+
+- name: Ship the pg_hba.conf in cluster's config directory
   template:
     src: pg_hba.conf.j2
     dest: "/etc/postgresql/{{item.value.version}}/{{item.key}}/pg_hba.conf"
@@ -93,8 +93,8 @@
 - name: Ship the  logrotate configuration to the servers
   template:
     src: logrotate_pgsql.j2
-    dest: "{{ logrotate_file }}"
-    owner: "{{ pg_osuser }}"
+    dest: "{{ logrotate_pgsql }}"
+    owner: "root"
     group: "{{ pg_osgroup }}"
     mode: 0644
 
@@ -106,8 +106,8 @@
     owner: "{{ pg_osuser }}"
     mode: 0600
     block: |
-     localhost:{{ item.value.params.port }}:*:{{ item.value.pg_super_user|default(pg_super_user) }}:{{ item.value.pg_super_password|default(pg_super_password) }}
-     *:{{ item.value.params.port }}:*:{{ item.value.pg_super_user|default(pg_super_user) }}:{{ item.value.pg_super_password|default(pg_super_password) }}
+     localhost:{{ item.value.params.port }}:*:{{ pg_osuser }}:{{ item.value.pg_super_password|default(pg_super_password) }}
+     *:{{ item.value.params.port }}:*:{{ pg_osuser }}:{{ item.value.pg_super_password|default(pg_super_password) }}
     marker: "# {mark} ANSIBLE MANAGED BLOCK SUPER USER FOR cluster {{ item.key }}:{{ item.value.params.port }}"
   with_dict: "{{ pg_clusters }}"
 
@@ -133,3 +133,4 @@
   service:
     name: postgresql
     state: started
+  when: inventory_hostname == pg_backrest.primary

@@ -1,0 +1,10 @@
+{{ pg_backrest.repository }}/logs/*.log {
+       {{ pg_backrest.log_rotate.mode }}
+       rotate {{ pg_backrest.log_rotate.keep }}
+       copytruncate
+       delaycompress
+       compress
+       notifempty
+       missingok
+       su root root
+}

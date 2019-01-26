@@ -17,3 +17,9 @@
     - pgsql
   remote_user: ansible
   become: yes
+
+- hosts: pgbackrest
+  roles:
+    - pgbackrest
+  remote_user: ansible
+  become: yes

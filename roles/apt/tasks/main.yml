@@ -52,6 +52,12 @@
     group: "{{ pg_osgroup }}"
     mode: 0744
 
+- name: build a list of postgresql major versions from the dictionary pg_clusters
+  set_fact:
+    pgsql_versions: "{{ (pgsql_versions|default([])  +  [item.value.version])|unique }}"
+  with_dict: "{{ pg_clusters }}"
+
+
 - name: install postgresql versioned packages
   apt:
     name: "{{ item.0 }}{{ item.1 }}"
@@ -60,3 +66,15 @@
   with_nested:
     - "{{ pgsql_packages }}"
     - "{{ pgsql_versions }}"
+
+- name: build a list of encoding to be installed on the server
+  set_fact:
+    db_locale: "{{ (db_locale|default([])  +  [item.value.locale|default(default_locale)])|unique }}"
+  with_dict: "{{ pg_clusters }}"
+
+- name: Ensure the locale required by the clusters exists
+  locale_gen:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ db_locale }}"
+  

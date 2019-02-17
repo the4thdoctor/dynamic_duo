@@ -14,3 +14,9 @@
   file:
     path: "{{ logrotate_pgsql }}"
     state: absent
+
+- name: remove the cluster's directories in etc
+  file:
+    path: "/etc/postgresql/{{ item.value.version }}/{{ item.key }}"
+    state: absent
+  with_dict: "{{ pg_clusters }}"

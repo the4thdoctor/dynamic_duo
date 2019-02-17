@@ -30,10 +30,10 @@
 
 - name: install common packages
   apt:
-    name: "{{ item }}"
+    name: "{{ common_packages }}"
     update_cache: yes
     cache_valid_time: 86400
-  with_items: "{{ common_packages }}"
+
 
 - name: create include directory for createcluster
   file:
@@ -77,4 +77,3 @@
     name: "{{ item }}"
     state: present
   with_items: "{{ db_locale }}"
-  

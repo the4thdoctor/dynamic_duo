@@ -1,5 +1,5 @@
 ---
-- name: Ship the hostname template with the server names
+- name: Ship the hosts template resolving the server names
   template:
     src: hosts.j2
     dest: /etc/hosts

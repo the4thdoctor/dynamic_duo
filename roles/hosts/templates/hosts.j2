@@ -3,7 +3,7 @@
 
 {% for host in groups['hosts'] %}
 {% if ansible_hostname!=hostvars[host]['inventory_hostname'] %}
-{{ hostvars[host]['srv_ip'] }}	{{ hostvars[host]['inventory_hostname'] }}
+{{ hostvars[host]['ansible_host'] }}	{{ hostvars[host]['inventory_hostname'] }}
 {% endif %}
 {% endfor %}
 

@@ -18,6 +18,7 @@
   loop_control:
     loop_var: db_cluster
 
+
 - name: Create the files with the postgresql super user password
   lineinfile:
     owner: "{{ pg_osuser }}"
@@ -28,12 +29,12 @@
     create: yes
   with_dict: "{{ pg_clusters }}"
 
+
 - name: Initialise the postgresql clusters using an include
   include: init_cluster.yml
   with_dict: "{{ pg_clusters }}"
   loop_control:
     loop_var: db_cluster
-
 
 
 - name: Remove the the files with the postgresql super user password
@@ -51,6 +52,7 @@
     mode: 0744
   with_dict: "{{ pg_clusters}}"
 
+
 - name: Ensure the conf.d path is set as include in postgresql.conf
   lineinfile:
     path: "/etc/postgresql/{{item.value.version}}/{{item.key}}/postgresql.conf"
@@ -61,6 +63,7 @@
     mode: 0644
   with_dict: "{{ pg_clusters}}"
 
+
 - name: Ship the custom postgresql.conf in conf.d
   template:
     src: postgresql.conf.j2
@@ -70,6 +73,7 @@
     mode: 0644
   with_dict: "{{ pg_clusters}}"
 
+
 - name: Ship the custom pgbackrest.conf in conf.d
   template:
     src: postgresql_pgbackrest.conf.j2
@@ -78,7 +82,7 @@
     group: "{{ pg_osgroup }}"
     mode: 0644
   with_dict: "{{ pg_clusters}}"
-  when: inventory_hostname in groups['dbserver']
+
 
 
 - name: Ship the pg_hba.conf in cluster's config directory
@@ -90,6 +94,7 @@
     mode: 0644
   with_dict: "{{ pg_clusters}}"
 
+
 - name: Ship the  logrotate configuration to the servers
   template:
     src: logrotate_pgsql.j2
@@ -97,6 +102,7 @@
     owner: "root"
     group: "{{ pg_osgroup }}"
     mode: 0644
+
 
 - name: populate the pgpass file with the postgres super users connection data
   blockinfile:
@@ -110,6 +116,7 @@
      *:{{ item.value.params.port }}:*:{{ pg_osuser }}:{{ item.value.pg_super_password|default(pg_super_password) }}
     marker: "# {mark} ANSIBLE MANAGED BLOCK SUPER USER FOR cluster {{ item.key }}:{{ item.value.params.port }}"
   with_dict: "{{ pg_clusters }}"
+
 
 - name: populate the pg_service file with the postgres super users connection data
   blockinfile:
@@ -134,3 +141,12 @@
     name: postgresql
     state: started
   when: inventory_hostname == pg_backrest.primary
+
+- name: Ship the start.conf in cluster's config directory
+  template:
+    src: start.conf.j2
+    dest: "/etc/postgresql/{{item.value.version}}/{{item.key}}/start.conf"
+    owner: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    mode: 0644
+  with_dict: "{{ pg_clusters}}"

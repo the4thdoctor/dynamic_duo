@@ -64,6 +64,7 @@
     owner: "{{ pg_osuser }}"
     group: "{{ pg_osgroup }}"
     mode: 0600
+
 - name: deploy run_backup
   template:
     src: run_backup.sh.j2
@@ -71,6 +72,7 @@
     owner: "{{ pg_osuser }}"
     group: "{{ pg_osgroup }}"
     mode: 0700
+  when: inventory_hostname in groups['bckserver']
 
 - name: Ship the  logrotate configuration for pgbackrest to the backup server
   template:
@@ -80,3 +82,12 @@
     group: "{{ pg_osgroup }}"
     mode: 0644
   when: inventory_hostname in groups['bckserver']
+
+- name: deploy test_restore
+  template:
+    src: test_restore.sh.j2
+    dest: "{{pg_home_dir}}/test_restore.sh"
+    owner: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    mode: 0700
+  when: inventory_hostname in groups['rstserver']

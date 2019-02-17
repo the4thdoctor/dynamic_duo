@@ -23,13 +23,14 @@ As this is potentially destructive role by default all the tasks are skipped.
 
 The actions from the roles can be rolled back individually passing the appropriate variable set to true or entirely using the wildcard variable ``rbk_all``.
 
-    #rolls back the apt configuration leaving the hosts untouched
+    #rolback the apt configuration leaving the hosts untouched
     ansible-playbook rollback.yml --extra-vars="rbk_apt=True"
 
 * **rbk_hosts=True** removes the hosts configuration
 * **rbk_apt=True** removes the apt configuration
 * **rbk_ssh=True** removes the ssh configuration
 * **rbk_pgsql=True** removes the postgresql clusters and configuration
+* **rbk_pgbackrest=True** removes the pgbackrest backup repository
 * **rbk_all=True** removes all the changes applied
 
 

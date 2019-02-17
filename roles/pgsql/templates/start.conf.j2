@@ -1,0 +1,7 @@
+{% if inventory_hostname in groups['rstserver'] %}
+manual
+{% elif inventory_hostname == pg_backrest.secondary %}
+auto
+{% else %}
+{{ item.value.start_mode|default(start_mode) }}
+{% endif %}

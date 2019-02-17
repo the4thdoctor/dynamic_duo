@@ -28,16 +28,19 @@ then
       bck_ko=( "${bck_ko[@]}" $stanza )
     fi
   done
-  if [ {{ '${#bck_ok[@]}' }} -gt 0 ]
-  then
-    echo "$(timestamp) stanzas successful: ${bck_ok[@]}"
-    echo "Backup successful for stanzas: ${bck_ok[@]}" | mutt -s "[{{ ansible_host }}] - BACKUP OK" rotellaro@gmail.com
-  fi
-  if [ {{ '${#bck_ko[@]}' }} -gt 0 ]
-  then
-    echo "$(timestamp) stanzas failed: ${bck_ko[@]}"
-    echo "Backup failed for stanzas: ${bck_ok[@]}" | mutt -s "[{{ ansible_host }}] - BACKUP KO " rotellaro@gmail.com
-  fi
+  for recipient in {{ smtp_recipients|join(' ') }}
+  do
+    if [ {{ '${#bck_ok[@]}' }} -gt 0 ]
+    then
+      echo "$(timestamp) stanzas successful: ${bck_ok[@]}"
+      echo "Backup successful for stanzas: ${bck_ok[@]}" | mutt -s "[{{ ansible_hostname }}] - BACKUP OK" $recipient
+    fi
+    if [ {{ '${#bck_ko[@]}' }} -gt 0 ]
+    then
+      echo "$(timestamp) stanzas failed: ${bck_ko[@]}"
+      echo "Backup failed for stanzas: ${bck_ko[@]}" | mutt -s "[{{ ansible_hostname }}] - BACKUP KO " $recipient
+    fi
+  done
 else
   echo "$(timestamp) Starting backup $1 for stanza $2"
   bck_status=$?

@@ -27,10 +27,10 @@
 
 - name: purge common packages
   apt:
-    name: "{{ item }}"
+    name: "{{ common_packages }}"
     state: absent
     purge: yes
-  with_items: "{{ common_packages }}"
+
 
 
 

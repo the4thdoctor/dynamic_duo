@@ -1,4 +1,13 @@
+{% set cluster_params = params|combine(item.value.params) %}
+{% if  ('wal_level' not in cluster_params)  %}
+{%  set wal_level='replica' %}
+{% elif (cluster_params['wal_level'] not in ['logical','replica','hot_standby']) %}
+{%  set wal_level='replica' %}
+{% else  %}
+{%  set wal_level=cluster_params['wal_level'] %}
+{% endif %}
+
 max_wal_senders=3
-wal_level='replica'
+wal_level={{ wal_level }}
 archive_mode='on'
 archive_command = 'pgbackrest --stanza={{item.key}} archive-push %p'

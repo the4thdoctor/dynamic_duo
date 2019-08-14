@@ -37,9 +37,9 @@ pg_backrest:
     - "standby_mode=on"
 
 
-  log_rotate:
-    mode: "daily"
-    keep: "31"
+log_rotate:
+  mode: "daily"
+  keep: "31"
 
 
 pgbackrest_conf: "/etc/pgbackrest.conf"

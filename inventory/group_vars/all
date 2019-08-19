@@ -32,7 +32,7 @@ pg_backrest:
   backup_server: backupsrv
   primary: db01
   secondary: db02
-  repository: /pg_backrest/
+  repository: /pg_backrest
   recovery_option:
     - "standby_mode=on"
 

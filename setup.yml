@@ -12,14 +12,8 @@
   remote_user: ansible
   become: yes
 
-- hosts: dbserver,rstserver
+- hosts: pgsql
   roles:
     - pgsql
-  remote_user: ansible
-  become: yes
-
-- hosts: pgbackrest
-  roles:
-    - pgbackrest
   remote_user: ansible
   become: yes

@@ -1,0 +1,45 @@
+{% if ansible_fqdn in groups['bckserver'] %}
+{% for dbhost in groups['pgsql'] %}
+{% set pg_clusters = pg_clusters|combine(hostvars[dbhost].pg_clusters|default(pg_clusters)) %}
+{% endfor %}
+
+{% for db_cluster in pg_clusters %}
+
+[{{db_cluster}}]
+{% set db_dirs = pg_dirs| combine(pg_clusters[db_cluster].pg_dirs|default(pg_dirs)) %}
+pg1-path={{ db_dirs.data_area }}/{{pg_clusters[db_cluster].version}}/{{db_cluster}}
+pg1-host-user={{pg_osuser}}
+pg1-port={{pg_clusters[db_cluster].params.port}}
+pg1-host={{pg_backrest.primary}}
+pg2-host-user={{pg_osuser}}
+pg2-port={{pg_clusters[db_cluster].params.port}}
+pg2-host={{pg_backrest.secondary}}
+
+
+{% endfor %}
+
+[global]
+repo-path={{ pg_backrest.repository }}
+log-level-console=error
+log-level-file=info
+log-path={{ pg_backrest.repository }}/logs/
+repo1-retention-full=1
+{% else %}
+
+[global]
+backup-host={{pg_backrest.backup_server}}
+backup-user={{pg_osuser}}
+log-level-console=error
+log-level-file=error
+
+{% for db_cluster in pg_clusters %}
+
+[{{db_cluster}}]
+{% set db_dirs = pg_dirs| combine(pg_clusters[db_cluster].pg_dirs|default(pg_dirs)) %}
+pg1-path={{ db_dirs.data_area }}/{{pg_clusters[db_cluster].version}}/{{db_cluster}}
+pg1-port={{pg_clusters[db_cluster].params.port}}
+{{ 'recovery-option='+pg_backrest.recovery_option|join('\n') }}
+log-path={{ db_dirs.log_directory }}/{{pg_clusters[db_cluster].version}}/{{db_cluster}}/
+{% endfor %}
+
+{% endif %}

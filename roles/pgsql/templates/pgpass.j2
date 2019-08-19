@@ -1,0 +1,7 @@
+{%for dbhost in groups.pgsql %}
+{%for cluster in pg_clusters %}
+localhost:5432:*:postgres:postgres
+
+{{ parameter }}='{{ cluster_params[parameter] }}'
+{% endfor %}
+{% endfor %}

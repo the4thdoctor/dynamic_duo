@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+backup_mode=$1
+backup_stanza=$2
+script_dir=`dirname "$0"`
+here=`pwd`
+cd $script_dir
+bck_ok=()
+bck_ko=()
+
+function timestamp()
+{
+  date '+%Y-%m-%d %H:%M:%S'
+
+
+}
+
+if [ "$backup_stanza" == "" ]
+then
+  for stanza in {{ pg_clusters.keys()|list|join(' ') }}
+  do
+    echo "$(timestamp) Starting backup $1 for stanza $stanza"
+    pgbackrest backup --type=$backup_mode --stanza $stanza
+    bck_status=$?
+    if [ $bck_status -eq 0 ]
+    then
+      bck_ok=( "${bck_ok[@]}" $stanza )
+    else
+      bck_ko=( "${bck_ko[@]}" $stanza )
+    fi
+  done
+  for recipient in {{ smtp_recipients|join(' ') }}
+  do
+    if [ {{ '${#bck_ok[@]}' }} -gt 0 ]
+    then
+      echo "$(timestamp) stanzas successful: ${bck_ok[@]}"
+      echo "Backup successful for stanzas: ${bck_ok[@]}" | mutt -s "[{{ ansible_hostname }}] - BACKUP OK" $recipient
+    fi
+    if [ {{ '${#bck_ko[@]}' }} -gt 0 ]
+    then
+      echo "$(timestamp) stanzas failed: ${bck_ko[@]}"
+      echo "Backup failed for stanzas: ${bck_ko[@]}" | mutt -s "[{{ ansible_hostname }}] - BACKUP KO " $recipient
+    fi
+  done
+else
+  echo "$(timestamp) Starting backup $1 for stanza $2"
+  bck_status=$?
+  if [ $bck_status -eq 0 ]
+  then
+    echo "Backup successful for stanza: $2" | mutt -s "[{{ ansible_host }}] - BACKUP OK" rotellaro@gmail.com
+  else
+    echo "Backup failed for stanza: $2" | mutt -s "[{{ ansible_host }}] - BACKUP KO" rotellaro@gmail.com
+  fi
+fi
+
+cd $here

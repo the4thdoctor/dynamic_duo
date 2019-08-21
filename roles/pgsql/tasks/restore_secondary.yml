@@ -1,0 +1,11 @@
+- name: Create the database directory dictionary for the cluster {{ db_cluster.key }}
+  set_fact:
+    db_dir: "{{ pg_dirs| combine(db_cluster.value.pg_dirs|default(pg_dirs)) }}"
+
+
+- name: restore the backup on the secondary
+  command: pgbackrest restore --delta --stanza {{db_cluster.key}}
+  become: yes
+  become_user: "{{ pg_osuser }}"
+  args:
+    creates: "{{ db_dir.data_area }}/{{db_cluster.value.version}}/{{db_cluster.key}}/recovery.conf"

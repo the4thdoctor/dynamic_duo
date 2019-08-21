@@ -39,3 +39,26 @@
 - name: setup the backup server
   include: setup_bckserver.yml
   when: ('bckserver' in group_names)
+
+- name: restore the backup on the secondary
+  include: restore_secondary.yml
+  with_dict: "{{ pg_clusters }}"
+  when: inventory_hostname == pg_backrest.secondary
+  loop_control:
+    loop_var: db_cluster
+
+- name: Start the postgresql service on the secondary
+  service:
+    name: postgresql
+    state: started
+  when: inventory_hostname == pg_backrest.secondary
+
+
+- name: deploy test_restore
+  template:
+    src: test_restore.sh.j2
+    dest: "{{pg_home_dir}}/test_restore.sh"
+    owner: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    mode: 0700
+  when: ('rstserver' in group_names)

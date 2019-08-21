@@ -1,0 +1,42 @@
+---
+- name: create the pgbackrest repository
+  file:
+    path: "{{ pg_backrest.repository }}"
+    owner: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    state: directory
+    mode: 0700
+
+- name: create the pgbackrest log directory
+  file:
+    path: "{{ pg_backrest.repository }}/logs"
+    owner: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    state: directory
+    mode: 0700
+
+- name: create stanzas on the backup server
+  command: pgbackrest stanza-create --stanza {{item.key}}
+  become: yes
+  become_user: "{{ pg_osuser }}"
+  args:
+    creates: "{{ pg_backrest.repository }}/backup/{{item.key}}/"
+  when: inventory_hostname in groups['bckserver']
+  with_dict: "{{ pg_clusters }}"
+
+- name: deploy run_backup
+  template:
+    src: run_backup.sh.j2
+    dest: "{{pg_home_dir}}/run_backup.sh"
+    owner: "{{ pg_osuser }}"
+    group: "{{ pg_osgroup }}"
+    mode: 0700
+
+- name: execute the first backup
+  command: pgbackrest backup --stanza {{item.key}}
+  become: yes
+  become_user: "{{ pg_osuser }}"
+  args:
+    creates: "{{ pg_backrest.repository }}/backup/{{item.key}}/latest"
+  when: inventory_hostname in groups['bckserver']
+  with_dict: "{{ pg_clusters }}"

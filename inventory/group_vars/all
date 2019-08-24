@@ -35,7 +35,9 @@ pg_backrest:
   repository: /pg_backrest
   recovery_option:
     - "standby_mode=on"
-
+  log_rotate:
+    mode: "daily"
+    keep: "31"
 
 
 pgbackrest_conf: "/etc/pgbackrest.conf"
@@ -128,5 +130,5 @@ cron_config:
       weekday: 0
       minute: 40
       hour: 01
-      job: "{{ pg_home_dir }}/run_backup.sh full"
+      job: "{{ pg_home_dir }}/test_restore.sh"
       user: "{{ pg_osuser }}"

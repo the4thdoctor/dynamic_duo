@@ -20,3 +20,8 @@
   cron: "{{ item }}"
   with_items: "{{cron_config.backup}}"
   when: inventory_hostname in groups['bckserver']
+
+- name: setup the cronjobs for restore test restore server
+  cron: "{{ item }}"
+  with_items: "{{cron_config.restore}}"
+  when: inventory_hostname in groups['rstserver']

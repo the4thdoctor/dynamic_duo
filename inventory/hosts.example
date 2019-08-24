@@ -24,3 +24,7 @@ hosts
 dbserver
 bckserver
 rstserver
+
+[pgbackrest:children]
+bckserver
+rstserver

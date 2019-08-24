@@ -110,7 +110,7 @@ pg_clusters:
       wal_level: "replica"
 
 cron_config:
-  all:
+  backup:
     - name: "backup full on sunday"
       weekday: 0
       minute: 15
@@ -122,4 +122,11 @@ cron_config:
       minute: 15
       hour: 20
       job: "{{ pg_home_dir }}/run_backup.sh incr"
+      user: "{{ pg_osuser }}"
+  restore:
+    - name: "test restore weekly"
+      weekday: 0
+      minute: 40
+      hour: 01
+      job: "{{ pg_home_dir }}/run_backup.sh full"
       user: "{{ pg_osuser }}"

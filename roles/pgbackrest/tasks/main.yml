@@ -1,62 +1,4 @@
 ---
-- name: create the pgbackrest repository
-  file:
-    path: "{{ pg_backrest.repository }}"
-    owner: "{{ pg_osuser }}"
-    group: "{{ pg_osgroup }}"
-    state: directory
-    mode: 0700
-  when: inventory_hostname in groups['bckserver']
-
-- name: create the pgbackrest log directory
-  file:
-    path: "{{ pg_backrest.repository }}/logs"
-    owner: "{{ pg_osuser }}"
-    group: "{{ pg_osgroup }}"
-    state: directory
-    mode: 0700
-  when: inventory_hostname in groups['bckserver']
-
-
-- name: deploy pgbackrest.conf
-  template:
-    src: pgbackrest.conf.j2
-    dest: "{{ pgbackrest_conf }}"
-    owner: "{{ pg_osuser }}"
-    group: "{{ pg_osgroup }}"
-    mode: 0644
-
-- name: create stanzas on the backup server
-  command: pgbackrest stanza-create --stanza {{item.key}}
-  become: yes
-  become_user: "{{ pg_osuser }}"
-  args:
-    creates: "{{ pg_backrest.repository }}/backup/{{item.key}}/"
-  when: inventory_hostname in groups['bckserver']
-  with_dict: "{{ pg_clusters }}"
-
-- name: execute the first backup
-  command: pgbackrest backup --stanza {{item.key}}
-  become: yes
-  become_user: "{{ pg_osuser }}"
-  args:
-    creates: "{{ pg_backrest.repository }}/backup/{{item.key}}/latest"
-  when: inventory_hostname in groups['bckserver']
-  with_dict: "{{ pg_clusters }}"
-
-- name: restore the backup on the secondary
-  include: restore_secondary.yml
-  with_dict: "{{ pg_clusters }}"
-  when: inventory_hostname == pg_backrest.secondary
-  loop_control:
-    loop_var: db_cluster
-
-- name: Start the postgresql service on the secondary
-  service:
-    name: postgresql
-    state: started
-  when: inventory_hostname == pg_backrest.secondary
-
 - name: deploy muttrc
   template:
     src: muttrc.j2
@@ -64,15 +6,6 @@
     owner: "{{ pg_osuser }}"
     group: "{{ pg_osgroup }}"
     mode: 0600
-
-- name: deploy run_backup
-  template:
-    src: run_backup.sh.j2
-    dest: "{{pg_home_dir}}/run_backup.sh"
-    owner: "{{ pg_osuser }}"
-    group: "{{ pg_osgroup }}"
-    mode: 0700
-  when: inventory_hostname in groups['bckserver']
 
 - name: Ship the  logrotate configuration for pgbackrest to the backup server
   template:
@@ -83,11 +16,7 @@
     mode: 0644
   when: inventory_hostname in groups['bckserver']
 
-- name: deploy test_restore
-  template:
-    src: test_restore.sh.j2
-    dest: "{{pg_home_dir}}/test_restore.sh"
-    owner: "{{ pg_osuser }}"
-    group: "{{ pg_osgroup }}"
-    mode: 0700
-  when: inventory_hostname in groups['rstserver']
+- name: setup the cronjobs for all stanzas on the backup server
+  cron: "{{ item }}"
+  with_items: "{{cron_config.backup}}"
+  when: inventory_hostname in groups['bckserver']

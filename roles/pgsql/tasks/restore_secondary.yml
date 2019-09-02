@@ -1,4 +1,4 @@
-- name: Create the database directory dictionary for the cluster {{ db_cluster.key }}
+- name: Build a dictionary with the database directories for the cluster {{ db_cluster.key }}
   set_fact:
     db_dir: "{{ pg_dirs| combine(db_cluster.value.pg_dirs|default(pg_dirs)) }}"
 

@@ -38,7 +38,7 @@
 
 - name: setup the backup server
   include: setup_bckserver.yml
-  when: ('bckserver' in group_names)
+  when: inventory_hostname == pg_backrest.backup_server
 
 - name: restore the backup on the secondary
   include: restore_secondary.yml
@@ -61,4 +61,4 @@
     owner: "{{ pg_osuser }}"
     group: "{{ pg_osgroup }}"
     mode: 0700
-  when: ('rstserver' in group_names)
+  when: inventory_hostname == pg_backrest.restore_server

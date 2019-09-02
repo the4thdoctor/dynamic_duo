@@ -30,6 +30,7 @@ postgresql_common_include: "/etc/postgresql-common/createcluster.d"
 
 pg_backrest:
   backup_server: backupsrv
+  restore_server: restoresrv
   primary: db01
   secondary: db02
   repository: /pg_backrest
@@ -54,6 +55,8 @@ pg_super_password: !vault |
           3134633031373431620a623937386564346538663062643936353432643835383965616539623731
           3639
 
+smtp_host: smtp.gmail.com
+smtp_port: 587
 smtp_username: foo@bar.local
 smtp_password: !vault |
           $ANSIBLE_VAULT;1.1;AES256
@@ -114,21 +117,21 @@ pg_clusters:
 cron_config:
   backup:
     - name: "backup full on sunday"
-      weekday: 0
-      minute: 15
-      hour: 20
+      weekday: "0"
+      minute: "15"
+      hour: "20"
       job: "{{ pg_home_dir }}/run_backup.sh full"
       user: "{{ pg_osuser }}"
     - name: "incremental backup monday to saturday"
-      weekday: 1-6
-      minute: 15
-      hour: 20
+      weekday: "1-6"
+      minute: "15"
+      hour: "20"
       job: "{{ pg_home_dir }}/run_backup.sh incr"
       user: "{{ pg_osuser }}"
   restore:
     - name: "test restore weekly"
-      weekday: 0
-      minute: 40
-      hour: 01
+      weekday: "0"
+      minute: "40"
+      hour: "01"
       job: "{{ pg_home_dir }}/test_restore.sh"
       user: "{{ pg_osuser }}"

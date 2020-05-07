@@ -16,7 +16,7 @@
     name: "{{ item }}"
     update_cache: yes
     cache_valid_time: 86400
-  with_items: "{{ common_packages }}"
+  loop: "{{ common_packages|flatten(levels=1) }}"
 
 
 - name: install postgresql versioned packages
@@ -24,6 +24,4 @@
     name: "{{ item.0 }}{{ item.1 }}"
     update_cache: yes
     cache_valid_time: 86400
-  with_nested:
-    - "{{ pgsql_packages }}"
-    - "{{ pgsql_versions }}"
+  loop: "{{ pgsql_packages|product(pgsql_versions)|list }}"
